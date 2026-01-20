@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{/layouts/layout}"
+>
+  <head>
+    <title>Bootstrap demo</title>
+  </head>
+  <body>
+    <section layout:fragment="content">
+      <div class="w-75 m-auto bg-red-700">
+        <h1 th:text="${email.getSubject()}"></h1>
+        <h6 th:text="${email.getFrom()}"></h6>
+        <hr />
+        <div id="email_content"></div>
+      </div>
+      
+      <script th:inline="javascript">
+        const body = /*[[${email.getBody()}]]*/ "";
+        document.getElementById("email_content").innerHTML = body;
+      </script>
+    </section>
+  </body>
+</html>

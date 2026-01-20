@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Hola <span th:text="${name}"></span>
+    <p>Te han dado de alta en la plataforma, para crear tu cuenta accede a este link:</p>
+    <a th:href="@{${url} + '/register/' + ${token}}" th:text="Aquí"></a>
+</body>
+</html>

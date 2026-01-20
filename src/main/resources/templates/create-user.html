@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{/layouts/layout}"
+>
+  <head>
+    <title>Bootstrap demo</title>
+  </head>
+  <body>
+    <section layout:fragment="content">
+      <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+          <div class="col-md-8 col-lg-7 col-xl-6">
+            <img
+              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+              class="img-fluid"
+              alt="Phone image"
+            />
+          </div>
+          <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+            <form
+              id="register_form"
+              th:action="@{/create-user}"
+              th:object="${create_user}"
+              method="post"
+            >
+              <h3 class="mb-4 m-auto w-100 text-center">CREATE USER</h3>
+              <!-- Email input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control form-control-lg"
+                  th:field="*{email}"
+                />
+                <label class="form-label" for="email">Email</label>
+                <span
+                  th:if="${#fields.hasErrors('email')}"
+                  th:errors="*{email}"
+                  class="error-message d-block text-danger"
+                ></span>
+                <span
+                  th:if="${error}"
+                  class="error-message d-block text-danger"
+                  th:text="${error}"
+                ></span>
+                <span
+                  th:if="${success}"
+                  class="success-message d-block text-success"
+                  th:text="${success}"
+                ></span>
+              </div>
+
+
+              <div
+                class="d-flex justify-content-around align-items-center mb-4"
+              >
+                <!-- Submit button -->
+                <button
+                  type="submit"
+                  data-mdb-button-init
+                  data-mdb-ripple-init
+                  class="btn btn-primary btn-lg btn-block w-100"
+                >
+                  Create user
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

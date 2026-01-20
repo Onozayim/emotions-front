@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{/layouts/layout}"
+>
+  <head>
+    <title>Bootstrap demo</title>
+  </head>
+  <body>
+    <section layout:fragment="content">
+      <h1>Hello, world 2!</h1>
+
+      <div>
+        <canvas id="myChart"></canvas>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+      <script th:inline="javascript">
+        const ctx = document.getElementById("myChart");
+
+        const joy = /*[[${joy}]]*/ 0;
+        const sadness = /*[[${sadness}]]*/ 0;
+        const anger = /*[[${anger}]]*/ 0;
+        const fear = /*[[${fear}]]*/ 0;
+        const love = /*[[${love}]]*/ 0;
+        const surprise = /*[[${surprise}]]*/ 0;
+
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ["Joy", "Sadness", "Anger", "Fear", "Love", "Surprise"],
+            datasets: [
+              {
+                label: "Correos",
+                data: [joy, sadness, anger, fear, love, surprise],
+                borderWidth: 1,
+              },    
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      </script>
+    </section>
+  </body>
+</html>

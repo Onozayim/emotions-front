@@ -115,11 +115,11 @@
 							<version>1.18.32</version>
 						</path>
 					</annotationProcessorPaths>
-					<!-- <archive>
+					<archive>
 						<manifest>
 							<mainClass>com.emotions.emotions.EmotionsApplication</mainClass>
 						</manifest>
-					</archive> -->
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>

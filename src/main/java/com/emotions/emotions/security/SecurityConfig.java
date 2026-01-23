@@ -49,7 +49,7 @@ public class SecurityConfig {
             httForm.loginPage("/login").usernameParameter("email").permitAll();
         })
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/register/**","/create-user", "/css/**", "/js/**", "/images/**").permitAll();
+                    registry.requestMatchers("/login","/register/**","/create-user", "/css/**", "/js/**", "/images/**").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .build();

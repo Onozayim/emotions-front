@@ -47,7 +47,7 @@
           <ul class="nav navbar-nav">
             <a class="nav-link text-white" href="/">Home</a>
             <a class="nav-link text-white" href="/emails">Emails</a>
-            <a class="nav-link text-white" href="/users">Users</a>
+            <a class="nav-link text-white" sec:authorize="isAuthenticated()" href="/users">Users</a>
           </ul>
           <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-end">
             <a class="nav-link text-white" href="/logout">Logout</a>

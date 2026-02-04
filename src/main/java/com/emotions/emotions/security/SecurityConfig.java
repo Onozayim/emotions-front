@@ -3,6 +3,7 @@ package com.emotions.emotions.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +21,6 @@ import com.emotions.emotions.impls.UserService;
 public class SecurityConfig {
     @Autowired
     private UserService userService;
-
     @Bean
     public UserDetailsService userDetailsService() {
         return userService;

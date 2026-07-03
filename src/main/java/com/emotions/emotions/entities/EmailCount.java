@@ -1,5 +1,6 @@
 package com.emotions.emotions.entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,8 +23,18 @@ import lombok.NoArgsConstructor;
 @Data
 @EnableJpaAuditing
 public class EmailCount {
+
+    public EmailCount(Long joy, Long sadness, Long anger, Long fear, Long love, Long surprise) {
+        this.joy = joy != null ? joy.intValue() : 0;
+        this.sadness = sadness != null ? sadness.intValue() : 0;
+        this.anger = anger != null ? anger.intValue() : 0;
+        this.fear = fear != null ? fear.intValue() : 0;
+        this.love = love != null ? love.intValue() : 0;
+        this.surprise = surprise != null ? surprise.intValue() : 0;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
     
@@ -46,6 +57,6 @@ public class EmailCount {
     private int surprise = 0;
 
     @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
+    @Column(updatable = false, name = "created_at", nullable = false)
     private Date createdAt;
 }

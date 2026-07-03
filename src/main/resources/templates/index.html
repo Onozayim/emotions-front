@@ -9,7 +9,38 @@
   </head>
   <body>
     <section layout:fragment="content">
-      <h1>Hello, world 2!</h1>
+
+      <form th:action="@{/}" method="get">
+        <div class="row my-2 mx-auto w-75">
+          <div class="col-md-3">
+
+          <div class="col-md-3">
+            <label class="" for="date">From</label>
+            <input
+              class="form-control"
+              name="from"
+              type="date"
+              id="from"
+              th:value="${from}"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <label class="" for="date">To</label>
+            <input
+              class="form-control"
+              name="to"
+              type="date"
+              id="to"
+              th:value="${to}"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
 
       <div>
         <canvas id="myChart"></canvas>

@@ -2,6 +2,7 @@ package com.emotions.emotions.controller;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,7 @@ import org.thymeleaf.context.Context;
 import com.emotions.emotions.entities.CreateUserDto;
 import com.emotions.emotions.entities.Email;
 import com.emotions.emotions.entities.EmailCount;
+import com.emotions.emotions.entities.EmailCountDtoSum;
 import com.emotions.emotions.entities.EmailDetails;
 import com.emotions.emotions.entities.Paginator;
 import com.emotions.emotions.entities.RegisterDto;
@@ -35,6 +39,8 @@ import com.emotions.emotions.repositories.UserRepository;
 import com.emotions.emotions.services.EmailCountService;
 import com.emotions.emotions.services.SmtpService;
 import com.emotions.emotions.services.TokenService;
+import com.emotions.emotions.specifications.EmailCountSpecifications;
+import com.emotions.emotions.specifications.EmailSpecification;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -79,8 +85,19 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String getMethodName(Model model) {
+    public String getMethodName(
+        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date to,
+        Model model) {
         EmailCount emailCount = emailCountService.getLastCount();
+
+        Specification<EmailCount> spec = Specification.<EmailCount>unrestricted()
+        .and(EmailCountSpecifications.fromDate(from))
+        .and(EmailCountSpecifications.toDate(to));
+
+        EmailCountDtoSum emailCount2 = emailCountService.getSum(spec);
+
+        System.out.println(emailCount2);
 
         model.addAttribute("joy", emailCount.getJoy());
         model.addAttribute("sadness", emailCount.getSadness());
@@ -88,6 +105,9 @@ public class IndexController {
         model.addAttribute("fear", emailCount.getFear());
         model.addAttribute("love", emailCount.getLove());
         model.addAttribute("surprise", emailCount.getSurprise());
+
+        model.addAttribute("from", from);
+        model.addAttribute("to", to);
 
         System.out.println(emailCount.getAnger());
 
@@ -103,15 +123,30 @@ public class IndexController {
     }
 
     @GetMapping("/emails")
-    public String getEmails(@PageableDefault(size = 5, page = 0) Pageable pageable, Model model) {
-        Page<Email> page = emailRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+    public String getEmails(
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date to,
+            @RequestParam(required = false) String emotion,
+            @PageableDefault(size = 5, page = 0) Pageable pageable, Model model) {
+
+        Specification<Email> spec = Specification.<Email>unrestricted()
+                .and(EmailSpecification.hasEmotion(emotion))
+                .and(EmailSpecification.fromDate(from))
+                .and(EmailSpecification.toDate(to));
+
+        Page<Email> page = emailRepository.findAll(spec, pageable);
         Paginator paginator = paginatorController.generatePaginator(page);
 
+        model.addAttribute("emails", page.getContent());
+
         model.addAttribute("pageNumbers", paginator.getPageNumbers());
-        model.addAttribute("page", page);
         model.addAttribute("prevDots", paginator.isPrevDots());
         model.addAttribute("nextDots", paginator.isNextDots());
-        model.addAttribute("emails", page.getContent());
+
+        model.addAttribute("emotion", emotion);
+        model.addAttribute("page", page);
+        model.addAttribute("from", from);
+        model.addAttribute("to", to);
 
         return "emails";
     }
@@ -241,11 +276,13 @@ public class IndexController {
             user.setPassword(passwordEncoder.encode(register.getPassword()));
             userRepository.save(user);
 
-            // UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            //         register.getEmail(), register.getPassword());
+            // UsernamePasswordAuthenticationToken authenticationToken = new
+            // UsernamePasswordAuthenticationToken(
+            // register.getEmail(), register.getPassword());
             // authenticationToken.setDetails(new WebAuthenticationDetails(request));
 
-            // Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            // Authentication authentication =
+            // authenticationManager.authenticate(authenticationToken);
 
             // SecurityContextHolder.getContext().setAuthentication(authentication);
             request.login(register.getEmail(), register.getPassword());

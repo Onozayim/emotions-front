@@ -1,5 +1,8 @@
 package com.emotions.emotions.entities;
 
+import java.time.LocalDate;
+import java.util.Date;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import jakarta.persistence.Column;
@@ -20,7 +23,7 @@ import lombok.NoArgsConstructor;
 @EnableJpaAuditing
 public class Email {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -33,6 +36,10 @@ public class Email {
     @Column(name = "emotion", nullable = true)
     private String emotion;
 
-    @Column(name = "from", nullable = false)
+    @Column(name = "from_email", nullable = false)
     private String from;
+
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at", nullable = false)
+    private Date createdAt;
 }

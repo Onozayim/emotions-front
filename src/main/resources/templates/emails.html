@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   lang="es"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -9,18 +9,85 @@
   </head>
   <body>
     <section layout:fragment="content">
+      <form th:action="@{/emails}" method="get">
+        <div class="row my-2 mx-auto w-75">
+          <div class="col-md-3">
+            <label class="" for="date">Emotion</label>
+            <select
+              class="form-select"
+              id="emotion"
+              name="emotion"
+              th:value="${emotion}"
+            >
+              <option value="">-- All --</option>
+              <option th:selected="${emotion == 'joy'}" value="joy" >joy</option>
+              <option th:selected="${emotion == 'sadness'}" value="sadness">sadness</option>
+              <option th:selected="${emotion == 'anger'}" value="anger">anger</option>
+              <option th:selected="${emotion == 'fear'}" value="fear">fear</option>
+              <option th:selected="${emotion == 'surprise'}" value="surprise">surprise</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="" for="date">From</label>
+            <input
+              class="form-control"
+              name="from"
+              type="date"
+              id="from"
+              th:value="${from}"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <label class="" for="date">To</label>
+            <input
+              class="form-control"
+              name="to"
+              type="date"
+              id="to"
+              th:value="${to}"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
+
       <ul class="list-group list-group-light w-75 m-auto">
         <li
           class="list-group-item d-flex justify-content-between align-items-center"
           th:each="i: ${emails}"
         >
           <div>
-            <div class="fw-bold"> <a th:href="@{'/email/' + ${i.getId()}}" th:text="${i.getFrom()}"></a></div>
+            <div class="fw-bold">
+              <a
+                th:href="@{'/email/' + ${i.getId()}}"
+                th:text="${i.getFrom()}"
+              ></a>
+            </div>
             <div class="text-muted" th:text="${i.getSubject()}"></div>
           </div>
-          <span th:if="${#strings.contains(i.getEmotion(), 'anger')}" style="width: 70px;" class="badge rounded-pill text-bg-danger" th:text="${i.getEmotion()}"></span>
-          <span th:if="${#strings.contains(i.getEmotion(), 'joy') || #strings.contains(i.getEmotion(), 'love') || #strings.contains(i.getEmotion(), 'surprise')}" style="width: 70px;" class="badge rounded-pill text-bg-warning" th:text="${i.getEmotion()}"></span>
-          <span th:if="${#strings.contains(i.getEmotion(), 'sadness') || #strings.contains(i.getEmotion(), 'fear')}" style="width: 70px;" class="badge rounded-pill text-bg-primary" th:text="${i.getEmotion()}"></span>
+          <span
+            th:if="${#strings.contains(i.getEmotion(), 'anger')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getEmotion(), 'joy') || #strings.contains(i.getEmotion(), 'love') || #strings.contains(i.getEmotion(), 'surprise')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-warning"
+            th:text="${i.getEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getEmotion(), 'sadness') || #strings.contains(i.getEmotion(), 'fear')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-primary"
+            th:text="${i.getEmotion()}"
+          ></span>
         </li>
       </ul>
 

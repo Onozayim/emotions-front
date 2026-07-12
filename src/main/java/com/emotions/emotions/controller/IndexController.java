@@ -1,8 +1,10 @@
 package com.emotions.emotions.controller;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,30 +88,32 @@ public class IndexController {
 
     @GetMapping("/")
     public String getMethodName(
-        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date to,
+        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to,
         Model model) {
-        EmailCount emailCount = emailCountService.getLastCount();
+        // EmailCount emailCount = emailCountService.getLastCount();
 
         Specification<EmailCount> spec = Specification.<EmailCount>unrestricted()
         .and(EmailCountSpecifications.fromDate(from))
         .and(EmailCountSpecifications.toDate(to));
 
-        EmailCountDtoSum emailCount2 = emailCountService.getSum(spec);
+        EmailCountDtoSum email_count_total = emailCountService.getSum(spec);
 
-        System.out.println(emailCount2);
+        List<EmailCount> email_counts = emailCountService.getEmailCounts(spec);
 
-        model.addAttribute("joy", emailCount.getJoy());
-        model.addAttribute("sadness", emailCount.getSadness());
-        model.addAttribute("anger", emailCount.getAnger());
-        model.addAttribute("fear", emailCount.getFear());
-        model.addAttribute("love", emailCount.getLove());
-        model.addAttribute("surprise", emailCount.getSurprise());
+        model.addAttribute("joy", email_count_total.totalJoy());
+        model.addAttribute("sadness", email_count_total.totalSadness());
+        model.addAttribute("anger", email_count_total.totalAnger());
+        model.addAttribute("fear", email_count_total.totalFear());
+        model.addAttribute("love", email_count_total.totalLove());
+        model.addAttribute("surprise", email_count_total.totalSurprise());
+
+        model.addAttribute("email_counts", email_counts);
+
+        System.out.println(email_counts);
 
         model.addAttribute("from", from);
         model.addAttribute("to", to);
-
-        System.out.println(emailCount.getAnger());
 
         return "index";
     }

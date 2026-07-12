@@ -1,6 +1,10 @@
 package com.emotions.emotions.impls;
 
 
+import com.emotions.emotions.repositories.EmailRepository;
+
+import java.util.List;
+
 import javax.swing.text.html.parser.Entity;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +25,17 @@ import jakarta.persistence.criteria.Root;
 
 @Service
 public class EmailCountImpl implements EmailCountService {
+    private final EmailRepository emailRepository;
+
     @Autowired
     EmailCountRepository emailCountRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    EmailCountImpl(EmailRepository emailRepository) {
+        this.emailRepository = emailRepository;
+    }
 
     public EmailCount getLastCount() {
         return emailCountRepository.getLastRecord();
@@ -54,5 +63,10 @@ public class EmailCountImpl implements EmailCountService {
         )); 
 
         return entityManager.createQuery(query).getSingleResult();
+    }
+
+
+    public List<EmailCount> getEmailCounts(Specification<EmailCount> spec) {
+        return emailCountRepository.findAll(spec);
     }
 }

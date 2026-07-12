@@ -1,7 +1,6 @@
 package com.emotions.emotions.entities;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -58,5 +57,5 @@ public class EmailCount {
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at", nullable = false)
-    private Date createdAt;
+    private LocalDate createdAt;
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   lang="es"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -9,11 +9,8 @@
   </head>
   <body>
     <section layout:fragment="content">
-
       <form th:action="@{/}" method="get">
-        <div class="row my-2 mx-auto w-75">
-          <div class="col-md-3">
-
+        <div class="row my-2 mx-2 w-75">
           <div class="col-md-3">
             <label class="" for="date">From</label>
             <input
@@ -36,14 +33,20 @@
             />
           </div>
 
-          <div class="col-md-3">
-            <button class="btn btn-primary" type="submit">Search</button>
+          <div class="col-md-3 d-flex flex-column">
+            <button class="btn btn-primary mt-auto" type="submit">
+              Search
+            </button>
           </div>
         </div>
       </form>
 
-      <div>
+      <div class="w-75 mx-auto">
         <canvas id="myChart"></canvas>
+      </div>
+
+      <div class="w-75 mx-auto">
+        <canvas id="myChart2"></canvas>
       </div>
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -64,10 +67,90 @@
             labels: ["Joy", "Sadness", "Anger", "Fear", "Love", "Surprise"],
             datasets: [
               {
-                label: "Correos",
                 data: [joy, sadness, anger, fear, love, surprise],
+                backgroundColor: [
+                  "#FFD54F", // Joy - amarillo
+                  "#64B5F6", // Sadness - azul
+                  "#EF5350", // Anger - rojo
+                  "#7E57C2", // Fear - morado
+                  "#EC407A", // Love - rosa
+                  "#26A69A", // Surprise - verde azulado
+                ],
+                borderColor: [
+                  "#FFC107",
+                  "#1E88E5",
+                  "#D32F2F",
+                  "#5E35B1",
+                  "#D81B60",
+                  "#00897B",
+                ],
                 borderWidth: 1,
-              },    
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+
+        const ctx2 = document.getElementById("myChart2");
+
+        const stats = /*[[${email_counts}]]*/ 0;
+
+        const labels = stats.map(x => x.createdAt);
+
+        const joyData = stats.map(x => x.joy);
+        const sadnessData = stats.map(x => x.sadness);
+        const angerData = stats.map(x => x.anger);
+        const fearData = stats.map(x => x.fear);
+        const loveData = stats.map(x => x.love);
+        const surpriseData = stats.map(x => x.surprise);
+
+        new Chart(ctx2, {
+          type: "line",
+          data: {
+            labels:labels,
+            datasets: [
+              {
+                  label: "Joy",
+                  data: joyData,
+                  borderColor: "#FDD835",
+                  tension: 0.3
+              },
+              {
+                  label: "Sadness",
+                  data: sadnessData,
+                  borderColor: "#1E88E5",
+                  tension: 0.3
+              },
+              {
+                  label: "Anger",
+                  data: angerData,
+                  borderColor: "#E53935",
+                  tension: 0.3
+              },
+              {
+                  label: "Fear",
+                  data: fearData,
+                  borderColor: "#8E24AA",
+                  tension: 0.3
+              },
+              {
+                  label: "Love",
+                  data: loveData,
+                  borderColor: "#D81B60",
+                  tension: 0.3
+              },
+              {
+                  label: "Surprise",
+                  data: surpriseData,
+                  borderColor: "#FB8C00",
+                  tension: 0.3
+              }
             ],
           },
           options: {

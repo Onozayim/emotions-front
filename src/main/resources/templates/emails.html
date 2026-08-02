@@ -20,11 +20,50 @@
               th:value="${emotion}"
             >
               <option value="">-- All --</option>
-              <option th:selected="${emotion == 'joy'}" value="joy" >joy</option>
-              <option th:selected="${emotion == 'sadness'}" value="sadness">sadness</option>
-              <option th:selected="${emotion == 'anger'}" value="anger">anger</option>
-              <option th:selected="${emotion == 'fear'}" value="fear">fear</option>
-              <option th:selected="${emotion == 'surprise'}" value="surprise">surprise</option>
+              <option th:selected="${emotion == 'joy'}" value="joy">joy</option>
+              <option th:selected="${emotion == 'sadness'}" value="sadness">
+                sadness
+              </option>
+              <option th:selected="${emotion == 'anger'}" value="anger">
+                anger
+              </option>
+              <option th:selected="${emotion == 'fear'}" value="fear">
+                fear
+              </option>
+              <option th:selected="${emotion == 'disgust'}" value="disgust">
+                disgust
+              </option>
+
+              <option th:selected="${emotion == 'surprise'}" value="surprise">
+                surprise
+              </option>
+              <option th:selected="${emotion == 'nostalgia'}" value="nostalgia">
+                nostalgia
+              </option>
+              <option th:selected="${emotion == 'intrigue'}" value="intrigue">
+                intrigue
+              </option>
+              <option th:selected="${emotion == 'justice'}" value="justice">
+                justice
+              </option>
+              <option th:selected="${emotion == 'contempt'}" value="contempt">
+                contempt
+              </option>
+              <option th:selected="${emotion == 'anxiety'}" value="anxiety">
+                anxiety
+              </option>
+              <option th:selected="${emotion == 'betrayal'}" value="betrayal">
+                betrayal
+              </option>
+              <option th:selected="${emotion == 'repulsion'}" value="repulsion">
+                repulsion
+              </option>
+              <option th:selected="${emotion == 'aversion'}" value="aversion">
+                aversion
+              </option>
+              <option th:selected="${emotion == 'hate'}" value="hate">
+                hate
+              </option>
             </select>
           </div>
 
@@ -51,7 +90,9 @@
           </div>
 
           <div class="col-md-3 d-flex flex-column">
-            <button class="btn btn-primary mt-auto" type="submit">Search</button>
+            <button class="btn btn-primary mt-auto" type="submit">
+              Search
+            </button>
           </div>
         </div>
       </form>
@@ -71,22 +112,88 @@
             <div class="text-muted" th:text="${i.getSubject()}"></div>
           </div>
           <span
+            th:if="${#strings.contains(i.getEmotion(), 'joy')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getEmotion(), 'sadness')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getEmotion()}"
+          ></span>
+          <span
             th:if="${#strings.contains(i.getEmotion(), 'anger')}"
             style="width: 70px"
             class="badge rounded-pill text-bg-danger"
             th:text="${i.getEmotion()}"
           ></span>
           <span
-            th:if="${#strings.contains(i.getEmotion(), 'joy') || #strings.contains(i.getEmotion(), 'love') || #strings.contains(i.getEmotion(), 'surprise')}"
+            th:if="${#strings.contains(i.getEmotion(), 'fear')}"
             style="width: 70px"
-            class="badge rounded-pill text-bg-warning"
+            class="badge rounded-pill text-bg-danger"
             th:text="${i.getEmotion()}"
           ></span>
           <span
-            th:if="${#strings.contains(i.getEmotion(), 'sadness') || #strings.contains(i.getEmotion(), 'fear')}"
+            th:if="${#strings.contains(i.getEmotion(), 'disgust')}"
             style="width: 70px"
-            class="badge rounded-pill text-bg-primary"
+            class="badge rounded-pill text-bg-danger"
             th:text="${i.getEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'nostalgia')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'intrigue')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'justice')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'contempt')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'anxiety')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'betrayal')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'repulsion')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'aversion')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
+          ></span>
+          <span
+            th:if="${#strings.contains(i.getCompoundEmotion(), 'hate')}"
+            style="width: 70px"
+            class="badge rounded-pill text-bg-danger"
+            th:text="${i.getCompoundEmotion()}"
           ></span>
         </li>
       </ul>

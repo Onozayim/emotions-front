@@ -58,8 +58,22 @@ public class EmailCountImpl implements EmailCountService {
             cb.coalesce(cb.sum(root.get("sadness")).as(Long.class), 0L),
             cb.coalesce(cb.sum(root.get("anger")).as(Long.class), 0L),
             cb.coalesce(cb.sum(root.get("fear")).as(Long.class), 0L),
-            cb.coalesce(cb.sum(root.get("love")).as(Long.class), 0L),
-            cb.coalesce(cb.sum(root.get("surprise")).as(Long.class), 0L)
+            cb.coalesce(cb.sum(root.get("disgust")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("surprise")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("nostalgia")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("intrigue")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("justice")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("contempt")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("anxiety")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("betrayal")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("repulsion")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("aversion")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("hate")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("sec_joy")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("sec_sadness")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("sec_anger")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("sec_disgust")).as(Long.class), 0L),
+            cb.coalesce(cb.sum(root.get("sec_fear")).as(Long.class), 0L)
         )); 
 
         return entityManager.createQuery(query).getSingleResult();

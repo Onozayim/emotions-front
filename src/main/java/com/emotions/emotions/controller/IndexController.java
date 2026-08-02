@@ -105,12 +105,29 @@ public class IndexController {
         model.addAttribute("sadness", email_count_total.totalSadness());
         model.addAttribute("anger", email_count_total.totalAnger());
         model.addAttribute("fear", email_count_total.totalFear());
-        model.addAttribute("love", email_count_total.totalLove());
+        model.addAttribute("disgust", email_count_total.totalDisgust());
+
         model.addAttribute("surprise", email_count_total.totalSurprise());
+        model.addAttribute("nostalgia", email_count_total.totalNostalgia());
+        model.addAttribute("intrigue", email_count_total.totalIntrigue());
+        model.addAttribute("justice", email_count_total.totalJustice());
+        model.addAttribute("contempt", email_count_total.totalContempt());
+        model.addAttribute("anxiety", email_count_total.totalAnxiety());
+        model.addAttribute("betrayal", email_count_total.totalBetrayal());
+        model.addAttribute("repulsion", email_count_total.totalRepulsion());
+        model.addAttribute("aversion", email_count_total.totalAversion());
+        model.addAttribute("hate", email_count_total.totalHate());
+
+        model.addAttribute("sec_joy", email_count_total.totalSecJoy());
+        model.addAttribute("sec_sadness", email_count_total.totalSecSadness());
+        model.addAttribute("sec_anger", email_count_total.totalSecAnger());
+        model.addAttribute("sec_fear", email_count_total.totalSecFear());
+        model.addAttribute("sec_surprise", email_count_total.totalSecDisgust());
 
         model.addAttribute("email_counts", email_counts);
 
         System.out.println(email_counts);
+        System.out.println(email_count_total);
 
         model.addAttribute("from", from);
         model.addAttribute("to", to);

@@ -23,13 +23,12 @@ import lombok.NoArgsConstructor;
 @EnableJpaAuditing
 public class EmailCount {
 
-    public EmailCount(Long joy, Long sadness, Long anger, Long fear, Long love, Long surprise) {
+    public EmailCount(Long joy, Long sadness, Long anger, Long fear, Long love, Long disgust) {
         this.joy = joy != null ? joy.intValue() : 0;
         this.sadness = sadness != null ? sadness.intValue() : 0;
         this.anger = anger != null ? anger.intValue() : 0;
         this.fear = fear != null ? fear.intValue() : 0;
-        this.love = love != null ? love.intValue() : 0;
-        this.surprise = surprise != null ? surprise.intValue() : 0;
+        this.disgust = disgust != null ? disgust.intValue() : 0;
     }
 
     @Id
@@ -49,11 +48,53 @@ public class EmailCount {
     @Column(nullable = false, name = "fear")
     private int fear = 0;
 
-    @Column(nullable = false, name = "love")
-    private int love = 0;
+    @Column(nullable = false, name = "disgust")
+    private int disgust = 0;
 
     @Column(nullable = false, name = "surprise")
     private int surprise = 0;
+
+    @Column(nullable = false, name = "nostalgia")
+    private int nostalgia = 0;
+
+    @Column(nullable = false, name = "intrigue")
+    private int intrigue = 0;
+
+    @Column(nullable = false, name = "justice")
+    private int justice = 0;
+
+    @Column(nullable = false, name = "contempt")
+    private int contempt = 0;
+
+    @Column(nullable = false, name = "anxiety")
+    private int anxiety = 0;
+
+    @Column(nullable = false, name = "betrayal")
+    private int betrayal = 0;
+
+    @Column(nullable = false, name = "repulsion")
+    private int repulsion = 0;
+
+    @Column(nullable = false, name = "aversion")
+    private int aversion = 0;
+
+    @Column(nullable = false, name = "hate")
+    private int hate = 0;
+
+    @Column(nullable = false, name = "sec_joy")
+    private int sec_joy = 0;
+
+    @Column(nullable = false, name = "sec_sadness")
+    private int sec_sadness = 0;
+
+    @Column(nullable = false, name = "sec_anger")
+    private int sec_anger = 0;
+
+    @Column(nullable = false, name = "sec_fear")
+    private int sec_fear = 0;
+
+    @Column(nullable = false, name = "sec_disgust")
+    private int sec_disgust = 0;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at", nullable = false)

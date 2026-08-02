@@ -12,7 +12,9 @@ public class EmailSpecification {
         if (emotion == null || emotion.isBlank())
             return Specification.unrestricted();
 
-        return (root, query, cb) -> cb.equal(root.get("emotion"), emotion);
+        return (root, query, cb) -> cb.or(
+                cb.equal(root.get("emotion"), emotion),
+                cb.equal(root.get("compoundEmotion"), emotion));
     }
 
     public static Specification<Email> fromDate(Date from) {

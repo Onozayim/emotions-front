@@ -42,4 +42,10 @@ public class Email {
     @CreationTimestamp
     @Column(updatable = false, name = "created_at", nullable = false)
     private Date createdAt;
+
+    @Column(name = "secondary_emotion", nullable = true)
+    private String secondaryEmotion;
+
+    @Column(name = "compound_emotion", nullable = true)
+    private String compoundEmotion;
 }

@@ -1,0 +1,17 @@
+package com.emotions.emotions.entities;
+
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Data 
+@NoArgsConstructor 
+@AllArgsConstructor 
+public class EmotionSummarySnapshot {
+
+    private long totalEmails;
+    private List<EmotionSummary> emotions;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Survey</title>
+</head>
+
+<body style="
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 30px;
+">
+
+<div style="
+    max-width: 600px;
+    margin: auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+">
+
+    <h2>We'd like your feedback</h2>
+
+    <p th:text="${message}">
+        Thank you for contacting us.
+    </p>
+
+    <p>
+        We'd appreciate it if you could
+        take a moment to answer our survey.
+    </p>
+
+    <div style="margin: 30px 0;">
+
+        <a
+            th:href="${surveyUrl}"
+            style="
+                display: inline-block;
+                padding: 12px 20px;
+                background-color: #0d6efd;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+            "
+        >
+            Answer Survey
+        </a>
+
+    </div>
+
+    <p style="
+        color: #666;
+        font-size: 14px;
+    ">
+        Thank you for your feedback.
+    </p>
+
+</div>
+
+</body>
+</html>

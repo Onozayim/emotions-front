@@ -1,6 +1,7 @@
 package com.emotions.emotions.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -41,11 +42,20 @@ public class Email {
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at", nullable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "secondary_emotion", nullable = true)
     private String secondaryEmotion;
 
     @Column(name = "compound_emotion", nullable = true)
     private String compoundEmotion;
+
+    @Column(name = "fixed_emotion", nullable = true)
+    private String fixedEmotion;
+
+    @Column(name = "fixed_secondary_emotion", nullable = true)
+    private String fixedSecondaryEmotion;
+    
+    @Column(name = "fixed_compound_emotion", nullable = true)
+    private String fixedCompoundEmotion;
 }

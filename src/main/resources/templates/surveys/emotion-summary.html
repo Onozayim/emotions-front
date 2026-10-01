@@ -1,0 +1,116 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body
+    style="
+      margin: 0;
+      padding: 30px;
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    "
+  >
+    <div
+      style="
+        max-width: 600px;
+        margin: auto;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+      "
+    >
+      <h2 style="margin-top: 0">Thank you for your feedback!</h2>
+
+      <p>Here's a summary of the emotions detected across your emails.</p>
+
+      <p>
+        Emails analyzed:
+        <strong th:text="${totalEmails}"> 0 </strong>
+      </p>
+
+      <!-- Chart -->
+
+      <div style="text-align: center; margin: 30px 0">
+        <img
+          src="cid:emotionChart"
+          alt="Emotion distribution"
+          width="450"
+          style="max-width: 100%; height: auto"
+        />
+      </div>
+
+      <!-- Emotion table -->
+
+      <table style="width: 100%; border-collapse: collapse">
+        <thead>
+          <tr>
+            <th
+              style="
+                text-align: left;
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+              "
+            >
+              Emotion
+            </th>
+
+            <th
+              style="
+                text-align: right;
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+              "
+            >
+              Emails
+            </th>
+
+            <th
+              style="
+                text-align: right;
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+              "
+            >
+              Percentage
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr th:each="emotion : ${summary}">
+            <td style="padding: 10px" th:text="${emotion.emotion}">Joy</td>
+
+            <td
+              style="padding: 10px; text-align: right"
+              th:text="${emotion.count}"
+            >
+              10
+            </td>
+
+            <td
+              style="padding: 10px; text-align: right"
+              th:text="${
+                    #numbers.formatDecimal(
+                        emotion.percentage,
+                        1,
+                        1
+                    )
+                    + '%'
+                }"
+            >
+              50%
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top: 30px; font-size: 13px; color: #666">
+        This summary represents the emails analyzed up to the moment you
+        completed the survey.
+      </p>
+    </div>
+  </body>
+</html>

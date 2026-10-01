@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   lang="es"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -12,13 +12,169 @@
       <div class="w-75 m-auto bg-red-700">
         <h1 th:text="${email.getSubject()}"></h1>
         <h6 th:text="${email.getFrom()}"></h6>
+
+        <div class="w-25">
+          <select
+            class="form-select form-select-sm w-25 mb-2"
+            name="primary_emotion"
+            id="primary_emotion"
+          >
+            <option value="joy">Joy</option>
+            <option value="sadness">Sadness</option>
+            <option value="anger">Anger</option>
+            <option value="fear">Fear</option>
+            <option value="disgust">Disgust</option>
+          </select>
+
+          <select
+            class="form-select form-select-sm w-25 mb-2"
+            name="secondary_emotion"
+            id="secondary_emotion"
+          >
+            <option value="joy">Joy</option>
+            <option value="sadness">Sadness</option>
+            <option value="anger">Anger</option>
+            <option value="fear">Fear</option>
+            <option value="disgust">Disgust</option>
+          </select>
+
+          <p id="compound_emotion" th:text="${email.getCompoundEmotion()}"></p>
+
+          <button class="btn btn-primary" onclick="updateEmotion()">
+            Update
+          </button>
+        </div>
+
         <hr />
         <div id="email_content"></div>
       </div>
-      
+
       <script th:inline="javascript">
         const body = /*[[${email.getBody()}]]*/ "";
+        var id = /*[[${email.getId()}]]*/ "";
+
         document.getElementById("email_content").innerHTML = body;
+
+        const pr_emotion_change = document.getElementById("primary_emotion");
+        const sc_emotion_change = document.getElementById("secondary_emotion");
+
+        pr_emotion_change.addEventListener("change", (event) => {
+          const primary_emotion = event.target.value;
+          const secondary_emotion = sc_emotion_change.value;
+          document.getElementById("compound_emotion").innerText =
+            getCompoundEmotion(primary_emotion, secondary_emotion);
+        });
+
+        sc_emotion_change.addEventListener("change", (event) => {
+          const secondary_emotion = event.target.value;
+          const primary_emotion = pr_emotion_change.value;
+
+          document.getElementById("compound_emotion").innerText =
+            getCompoundEmotion(primary_emotion, secondary_emotion);
+        });
+
+        function getCompoundEmotion(primary_emotion, secondary_emotion) {
+          let compound_emotion = "";
+
+          if (
+            (primary_emotion == "joy" && secondary_emotion == "sadness") ||
+            (primary_emotion == "sadness" && secondary_emotion == "joy")
+          )
+            compound_emotion = "nostalgia";
+          else if (
+            (primary_emotion == "joy" && secondary_emotion == "disgust") ||
+            (primary_emotion == "disgust" && secondary_emotion == "joy")
+          )
+            compound_emotion = "intrigue";
+          else if (
+            (primary_emotion == "joy" && secondary_emotion == "fear") ||
+            (primary_emotion == "fear" && secondary_emotion == "joy")
+          )
+            compound_emotion = "surprise";
+          else if (
+            (primary_emotion == "joy" && secondary_emotion == "anger") ||
+            (primary_emotion == "anger" && secondary_emotion == "joy")
+          )
+            compound_emotion = "justice";
+          else if (
+            (primary_emotion == "sadness" && secondary_emotion == "disgust") ||
+            (primary_emotion == "disgust" && secondary_emotion == "sadness")
+          )
+            compound_emotion = "contempt";
+          else if (
+            (primary_emotion == "sadness" && secondary_emotion == "fear") ||
+            (primary_emotion == "fear" && secondary_emotion == "sadness")
+          )
+            compound_emotion = "anxiety";
+          else if (
+            (primary_emotion == "sadness" && secondary_emotion == "anger") ||
+            (primary_emotion == "anger" && secondary_emotion == "sadness")
+          )
+            compound_emotion = "betrayal";
+          else if (
+            (primary_emotion == "disgust" && secondary_emotion == "fear") ||
+            (primary_emotion == "fear" && secondary_emotion == "disgust")
+          )
+            compound_emotion = "repulsion";
+          else if (
+            (primary_emotion == "disgust" && secondary_emotion == "anger") ||
+            (primary_emotion == "anger" && secondary_emotion == "disgust")
+          )
+            compound_emotion = "aversion";
+          else if (
+            (primary_emotion == "fear" && secondary_emotion == "anger") ||
+            (primary_emotion == "anger" && secondary_emotion == "fear")
+          )
+            compound_emotion = "hate";
+
+          return compound_emotion;
+        }
+
+        function updateEmotion() {
+          const primaryEmotion = pr_emotion_change.value;
+          const secondaryEmotion = sc_emotion_change.value;
+
+          if (primaryEmotion == secondaryEmotion) {
+            Swal.fire({
+              title: "Updated!",
+              text: "The email has been updated.",
+              icon: "warning",
+            });
+
+            return;
+          }
+
+          const compoundEmotion = getCompoundEmotion(
+            primaryEmotion,
+            secondaryEmotion,
+          );
+
+          const body = {
+            primaryEmotion,
+            secondaryEmotion,
+            compoundEmotion,
+          };
+
+          fetch("/email/" + id, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          })
+            .then((response) => {
+              Swal.fire({
+                title: "Updated!",
+                text: "The email has been updated.",
+                icon: "success",
+              }).then((result) => {
+                window.location.reload();
+              });
+            })
+            .catch((response) => {
+              alert("Un error inexperado ah ocurrido");
+            });
+        }
       </script>
     </section>
   </body>

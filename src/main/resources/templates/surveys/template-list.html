@@ -1,0 +1,86 @@
+<!doctype html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+>
+  <head>
+    <title>Template List</title>
+  </head>
+
+  <body>
+    <section layout:fragment="content">
+      <div class="container py-4">
+        <h1 class="mb-4">Survey Templates</h1>
+
+        <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Emotion</th>
+                <th>Created</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr th:each="template : ${templates}">
+                <!-- ID -->
+
+                <td th:text="${template.id}">1</td>
+
+                <!-- Subject -->
+
+                <td th:text="${template.subject}">We'd love your feedback!</td>
+
+                <!-- Emotion -->
+
+                <td>
+                  <span
+                    class="badge bg-secondary"
+                    th:text="${template.emotion}"
+                  >
+                    positive
+                  </span>
+                </td>
+
+                <!-- Created -->
+
+                <td
+                  th:text="${#temporals.format(
+                template.createdAt,
+                'yyyy-MM-dd HH:mm'
+              )}"
+                >
+                  2026-09-25 20:30
+                </td>
+
+                <!-- Edit -->
+
+                <td>
+                  <a
+                    th:href="@{/survey-templates/{id}/edit(id=${template.id})}"
+                    class="btn btn-outline-primary btn-sm"
+                  >
+                    Edit
+                  </a>
+                </td>
+              </tr>
+
+              <!-- No templates -->
+
+              <tr th:if="${#lists.isEmpty(templates)}">
+                <td colspan="5" class="text-center text-muted py-4">
+                  No survey templates found.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

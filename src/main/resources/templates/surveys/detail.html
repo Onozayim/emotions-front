@@ -1,0 +1,196 @@
+<!doctype html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+>
+  <head>
+    <title>Survey Details</title>
+  </head>
+
+  <body>
+    <section layout:fragment="content">
+      <div class="container py-4">
+        <!-- Back -->
+        <div class="mb-3">
+          <a th:href="@{/surveys}" class="btn btn-outline-secondary btn-sm">
+            ← Back to surveys
+          </a>
+        </div>
+
+        <h1 class="mb-4">Survey Details</h1>
+
+        <!-- GENERAL INFORMATION -->
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <strong>General Information</strong>
+          </div>
+
+          <div class="card-body">
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <strong>ID</strong>
+              </div>
+
+              <div class="col-md-9" th:text="${surveyAnswer.id}">1</div>
+            </div>
+
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <strong>Email</strong>
+              </div>
+
+              <div class="col-md-9" th:text="${surveyAnswer.email}">
+                user@example.com
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <strong>Status</strong>
+              </div>
+
+              <div class="col-md-9">
+                <span
+                  class="badge bg-secondary"
+                  th:text="${surveyAnswer.status}"
+                >
+                  ANSWERED
+                </span>
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <strong>Created</strong>
+              </div>
+
+              <div class="col-md-9">
+                <span
+                  th:text="${#temporals.format(
+                surveyAnswer.createdAt,
+                'yyyy-MM-dd HH:mm'
+              )}"
+                >
+                </span>
+              </div>
+            </div>
+
+            <div class="row" th:if="${surveyAnswer.respondedAt != null}">
+              <div class="col-md-3">
+                <strong>Responded</strong>
+              </div>
+
+              <div class="col-md-9">
+                <span
+                  th:text="${#temporals.format(
+                surveyAnswer.respondedAt,
+                'yyyy-MM-dd HH:mm'
+              )}"
+                >
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SURVEY INFORMATION -->
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <strong>Survey Information</strong>
+          </div>
+
+          <div class="card-body">
+            <div class="mb-3">
+              <strong>Subject</strong>
+
+              <div th:text="${subject}">Survey subject</div>
+            </div>
+
+            <div class="mb-3">
+              <strong>Message</strong>
+
+              <p class="mb-0" th:text="${message}">Survey message</p>
+            </div>
+
+            <div>
+              <strong>Emotion</strong>
+
+              <div>
+                <span class="badge bg-primary" th:text="${emotion}">
+                  positive
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANSWERS -->
+
+        <div class="card">
+          <div class="card-header">
+            <strong>Answers</strong>
+          </div>
+
+          <div class="card-body">
+            <!-- Not answered -->
+
+            <div
+              th:if="${surveyAnswer.status.name() != 'ANSWERED'}"
+              class="alert alert-secondary mb-0"
+            >
+              This survey has not been answered yet.
+            </div>
+
+            <!-- Answered -->
+
+            <div th:if="${surveyAnswer.status.name() == 'ANSWERED'}">
+              <div
+                th:each="item, stat : ${questionAnswers}"
+                th:classappend="${!stat.last} ? 'border-bottom mb-3 pb-3' : ''"
+              >
+                <h5 th:text="${item.label}">Question</h5>
+
+                <!-- Rating -->
+
+                <div th:if="${item.type == 'rating'}">
+                  <strong>Rating:</strong>
+
+                  <span th:text="${item.answer}"> 5 </span>
+                </div>
+
+                <!-- Textarea -->
+
+                <div th:if="${item.type == 'textarea'}">
+                  <p class="mb-0" th:text="${item.answer}">Answer</p>
+                </div>
+
+                <!-- Multiple choice -->
+
+                <div th:if="${item.type == 'multiple_choice'}">
+                  <span
+                    class="badge bg-light text-dark border"
+                    th:text="${item.answer}"
+                  >
+                    Option
+                  </span>
+                </div>
+
+                <!-- No answer -->
+
+                <div th:if="${item.answer == null}">
+                  <span class="text-muted">
+                    <em>No answer provided</em>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

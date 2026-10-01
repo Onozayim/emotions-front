@@ -1,0 +1,302 @@
+<!doctype html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+>
+  <head>
+    <title>Surveys</title>
+  </head>
+
+  <body>
+    <section layout:fragment="content">
+      <div class="container py-4">
+        <h1 class="mb-4">Surveys</h1>
+
+        <!-- Filters -->
+        <form method="get" th:action="@{/surveys}" class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label">Email</label>
+
+            <input
+              type="text"
+              name="email"
+              class="form-control"
+              th:value="${email}"
+              placeholder="customer@example.com"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">From</label>
+
+            <input
+              type="date"
+              name="from"
+              class="form-control"
+              th:value="${from}"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">To</label>
+
+            <input
+              type="date"
+              name="to"
+              class="form-control"
+              th:value="${to}"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Emotion</label>
+
+            <select name="emotion" class="form-select">
+              <option value="">All</option>
+
+              <option value="positive" th:selected="${emotion == 'positive'}">
+                Positive
+              </option>
+
+              <option value="neutral" th:selected="${emotion == 'neutral'}">
+                Neutral
+              </option>
+
+              <option value="negative" th:selected="${emotion == 'negative'}">
+                Negative
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Status</label>
+
+            <select name="status" class="form-select">
+              <option value="">All</option>
+
+              <option
+                th:each="surveyStatus : ${statuses}"
+                th:value="${surveyStatus}"
+                th:text="${surveyStatus}"
+                th:selected="${surveyStatus == status}"
+              ></option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Filter</button>
+
+            <a th:href="@{/surveys}" class="btn btn-secondary"> Clear </a>
+          </div>
+        </form>
+
+        <!-- Survey table -->
+
+        <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Survey</th>
+                <th>Emotion</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Responded</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr th:each="survey : ${surveys}">
+                <td th:text="${survey.id}">1</td>
+
+                <td th:text="${survey.email}">customer@example.com</td>
+
+                <td th:text="${survey.survey.subject}">Survey</td>
+
+                <td>
+                  <span
+                    class="badge bg-secondary"
+                    th:text="${survey.survey.emotion}"
+                  >
+                    positive
+                  </span>
+                </td>
+
+                <td>
+                  <span class="badge bg-secondary" th:text="${survey.status}">
+                    ANSWERED
+                  </span>
+                </td>
+
+                <td
+                  th:text="${#temporals.format(
+                survey.createdAt,
+                'yyyy-MM-dd HH:mm'
+              )}"
+                ></td>
+
+                <td>
+                  <span
+                    th:if="${survey.respondedAt != null}"
+                    th:text="${#temporals.format(
+                  survey.respondedAt,
+                  'yyyy-MM-dd HH:mm'
+                )}"
+                  >
+                  </span>
+
+                  <span
+                    th:if="${survey.respondedAt == null}"
+                    class="text-muted"
+                  >
+                    —
+                  </span>
+                </td>
+
+                <td>
+                  <a
+                    th:href="@{/surveys/{id}(id=${survey.id})}"
+                    class="btn btn-outline-primary btn-sm"
+                  >
+                    View
+                  </a>
+                </td>
+              </tr>
+
+              <!-- Empty result -->
+
+              <tr th:if="${#lists.isEmpty(surveys)}">
+                <td colspan="8" class="text-center text-muted py-4">
+                  No surveys found.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+
+        <nav th:if="${page.totalPages > 1}">
+          <ul class="pagination justify-content-center mt-3">
+            <!-- Previous -->
+
+            <li class="page-item" th:classappend="${page.first} ? 'disabled'">
+              <a
+                class="page-link"
+                th:href="@{/surveys(
+              page=${page.number - 1},
+              size=${page.size},
+              email=${email},
+              from=${from},
+              to=${to},
+              emotion=${emotion},
+              status=${status}
+            )}"
+              >
+                Previous
+              </a>
+            </li>
+
+            <!-- First page -->
+
+            <li class="page-item" th:if="${prevDots}">
+              <a
+                class="page-link"
+                th:href="@{/surveys(
+              page=0,
+              size=${page.size},
+              email=${email},
+              from=${from},
+              to=${to},
+              emotion=${emotion},
+              status=${status}
+            )}"
+              >
+                1
+              </a>
+            </li>
+
+            <!-- Previous dots -->
+
+            <li class="page-item disabled" th:if="${prevDots}">
+              <span class="page-link">...</span>
+            </li>
+
+            <!-- Pages -->
+
+            <li
+              class="page-item"
+              th:each="i : ${pageNumbers}"
+              th:classappend="${i == page.number + 1} ? 'active'"
+            >
+              <a
+                class="page-link"
+                th:with="pageNum=${i - 1}"
+                th:href="@{/surveys(
+              page=${pageNum},
+              size=${page.size},
+              email=${email},
+              from=${from},
+              to=${to},
+              emotion=${emotion},
+              status=${status}
+            )}"
+                th:text="${i}"
+              >
+              </a>
+            </li>
+
+            <!-- Next dots -->
+
+            <li class="page-item disabled" th:if="${nextDots}">
+              <span class="page-link">...</span>
+            </li>
+
+            <!-- Last page -->
+
+            <li class="page-item" th:if="${nextDots}">
+              <a
+                class="page-link"
+                th:with="lastPage=${page.totalPages - 1}"
+                th:href="@{/surveys(
+              page=${lastPage},
+              size=${page.size},
+              email=${email},
+              from=${from},
+              to=${to},
+              emotion=${emotion},
+              status=${status}
+            )}"
+                th:text="${page.totalPages}"
+              >
+              </a>
+            </li>
+
+            <!-- Next -->
+
+            <li class="page-item" th:classappend="${page.last} ? 'disabled'">
+              <a
+                class="page-link"
+                th:href="@{/surveys(
+              page=${page.number + 1},
+              size=${page.size},
+              email=${email},
+              from=${from},
+              to=${to},
+              emotion=${emotion},
+              status=${status}
+            )}"
+              >
+                Next
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+  </body>
+</html>

@@ -87,7 +87,7 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String getMethodName(
+    public String mainPage(
         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to,
         Model model) {
@@ -233,11 +233,6 @@ public class IndexController {
                 return "create-user";
             }
 
-            System.out.println("token: ");
-            System.out.println(token);
-
-            System.out.println("EMAILLL!!!!!!!!");
-
             model.addAttribute("success", "An email was sent to create the user");
             return "create-user";
         } catch (Exception e) {
@@ -272,9 +267,6 @@ public class IndexController {
             error = "Token not valid";
 
         Token tokenRegister = tokenQuery.get();
-
-        System.out.println("TOKEN REGISTER");
-        System.out.println(tokenRegister);
 
         if (!tokenRegister.getEmail().equals(register.getEmail()) ||
                 tokenRegister.isUsed() || tokenRegister.isUsed()) {

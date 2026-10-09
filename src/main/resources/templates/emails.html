@@ -1,31 +1,33 @@
 <!doctype html>
 <html
-  lang="es"
+  lang="en"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="layouts/layout"
 >
   <head>
-    <title>Bootstrap demo</title>
+    <title>Emails</title>
   </head>
   <body>
     <section layout:fragment="content">
-      <form th:action="@{/emails}" method="get">
-        <div class="row my-2 mx-auto w-75">
-          <div class="col-md-3">
-            <label class="" for="emotion">Emotion</label>
+      <div class="container">
+        <h1 class="h3 mb-3">Emails</h1>
+
+        <form th:action="@{/emails}" method="get" class="row g-2 align-items-end mb-4">
+          <div class="col-sm-4 col-md-3">
+            <label class="form-label" for="emotion">Emotion</label>
             <select class="form-select" id="emotion" name="emotion">
-              <option value="">-- All --</option>
+              <option value="">All emotions</option>
               <option
                 th:each="e : ${emotions}"
                 th:value="${e.key}"
-                th:text="${e.key}"
+                th:text="${e.label}"
                 th:selected="${emotion == e.key}"
               ></option>
             </select>
           </div>
 
-          <div class="col-md-3">
-            <label class="" for="from">From</label>
+          <div class="col-sm-4 col-md-3">
+            <label class="form-label" for="from">From</label>
             <input
               class="form-control"
               name="from"
@@ -35,8 +37,8 @@
             />
           </div>
 
-          <div class="col-md-3">
-            <label class="" for="to">To</label>
+          <div class="col-sm-4 col-md-3">
+            <label class="form-label" for="to">To</label>
             <input
               class="form-control"
               name="to"
@@ -46,46 +48,52 @@
             />
           </div>
 
-          <div class="col-md-3 d-flex flex-column">
-            <button class="btn btn-primary mt-auto" type="submit">
-              Search
-            </button>
+          <div class="col-auto">
+            <button class="btn btn-primary" type="submit">Apply</button>
+            <a th:href="@{/emails}" class="btn btn-outline-secondary">Clear</a>
           </div>
+        </form>
+
+        <div th:if="${#lists.isEmpty(emails)}" class="alert alert-secondary">
+          No emails match these filters.
         </div>
-      </form>
 
-      <ul class="list-group list-group-light w-75 m-auto">
-        <li
-          class="list-group-item d-flex justify-content-between align-items-center"
-          th:each="i: ${emails}"
-        >
-          <div>
-            <div class="fw-bold">
+        <ul th:unless="${#lists.isEmpty(emails)}" class="list-group">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center gap-3"
+            th:each="i: ${emails}"
+          >
+            <div class="text-truncate">
               <a
-                th:href="@{'/email/' + ${i.getId()}}"
-                th:text="${i.getFrom()}"
+                class="fw-semibold"
+                th:href="@{/email/{id}(id=${i.getId()})}"
+                th:text="${i.getSubject() ?: '(no subject)'}"
               ></a>
+              <div class="small text-muted text-truncate">
+                <span th:text="${i.getFrom()}"></span>
+                ·
+                <span th:text="${#temporals.format(i.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></span>
+              </div>
             </div>
-            <div class="text-muted" th:text="${i.getSubject()}"></div>
-          </div>
-          <div class="d-flex gap-1">
-            <span
-              th:unless="${#strings.isEmpty(i.getEmotion())}"
-              style="width: 70px"
-              class="badge rounded-pill text-bg-danger"
-              th:text="${i.getEmotion()}"
-            ></span>
-            <span
-              th:unless="${#strings.isEmpty(i.getCompoundEmotion())}"
-              style="width: 70px"
-              class="badge rounded-pill text-bg-danger"
-              th:text="${i.getCompoundEmotion()}"
-            ></span>
-          </div>
-        </li>
-      </ul>
+            <div class="d-flex gap-1 flex-shrink-0">
+              <span
+                th:unless="${#strings.isEmpty(i.getEmotion())}"
+                class="badge rounded-pill text-bg-secondary"
+                th:title="'Primary emotion'"
+                th:text="${#strings.capitalize(i.getEmotion())}"
+              ></span>
+              <span
+                th:unless="${#strings.isEmpty(i.getCompoundEmotion())}"
+                class="badge rounded-pill text-bg-light border"
+                th:title="'Compound emotion'"
+                th:text="${#strings.capitalize(i.getCompoundEmotion())}"
+              ></span>
+            </div>
+          </li>
+        </ul>
 
-      <nav th:replace="~{fragments/pagination :: pagination}"></nav>
+        <nav th:replace="~{fragments/pagination :: pagination}"></nav>
+      </div>
     </section>
   </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html
-  lang="es"
+  lang="en"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layouts/layout}"
@@ -11,8 +11,8 @@
 
   <body>
     <section layout:fragment="content">
-      <div class="container py-4">
-        <h1 class="mb-4">Surveys</h1>
+      <div class="container">
+        <h1 class="h3 mb-3">Surveys</h1>
 
         <!-- Filters -->
         <form method="get" th:action="@{/surveys}" class="row g-3 mb-4">

@@ -12,6 +12,9 @@ document.querySelectorAll(".delete-user").forEach((button) => {
     }).then((result) => {
       if (!result.isConfirmed) return;
 
+      button.disabled = true;
+      button.textContent = "Deleting…";
+
       fetch(button.dataset.deleteUrl, {
         method: "DELETE",
       })
@@ -27,6 +30,9 @@ document.querySelectorAll(".delete-user").forEach((button) => {
           });
         })
         .catch((error) => {
+          button.disabled = false;
+          button.textContent = "Delete";
+
           Swal.fire({
             title: "Error",
             text: "The user could not be deleted. Please try again.",

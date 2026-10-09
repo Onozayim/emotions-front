@@ -1,67 +1,87 @@
 <!doctype html>
 <html
-  lang="es"
+  lang="en"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="layouts/layout"
 >
   <head>
-    <title>Bootstrap demo</title>
+    <title>Email</title>
   </head>
   <body>
     <section layout:fragment="content">
-      <div class="w-75 m-auto bg-red-700">
-        <h1 th:text="${email.getSubject()}"></h1>
-        <h6 th:text="${email.getFrom()}"></h6>
+      <div class="container">
+        <a th:href="@{/emails}" class="btn btn-outline-secondary btn-sm mb-3">← Back to emails</a>
+
+        <h1 class="h3" th:text="${email.getSubject() ?: '(no subject)'}"></h1>
+        <p class="text-muted">
+          <span th:text="${email.getFrom()}"></span>
+          ·
+          <span th:text="${#temporals.format(email.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></span>
+        </p>
 
         <div
           id="email-editor"
-          class="w-25"
+          class="card mb-4"
           th:data-update-url="@{/email/{id}(id=${email.getId()})}"
           th:data-current-primary="${email.getFixedEmotion() ?: email.getEmotion()}"
           th:data-current-secondary="${email.getFixedSecondaryEmotion() ?: email.getSecondaryEmotion()}"
         >
-          <select
-            class="form-select form-select-sm w-25 mb-2"
-            name="primary_emotion"
-            id="primary_emotion"
-          >
-            <option
-              th:each="emotion : ${emotions}"
-              th:unless="${emotion.compound}"
-              th:value="${emotion.key}"
-              th:text="${emotion.label}"
-            ></option>
-          </select>
+          <div class="card-body">
+            <h2 class="h6 card-title">Detected emotions</h2>
+            <div class="row g-2 align-items-end">
+              <div class="col-sm-4 col-md-3">
+                <label class="form-label small" for="primary_emotion">Primary</label>
+                <select class="form-select" id="primary_emotion">
+                  <option
+                    th:each="emotion : ${emotions}"
+                    th:unless="${emotion.compound}"
+                    th:value="${emotion.key}"
+                    th:text="${emotion.label}"
+                  ></option>
+                </select>
+              </div>
 
-          <select
-            class="form-select form-select-sm w-25 mb-2"
-            name="secondary_emotion"
-            id="secondary_emotion"
-          >
-            <option
-              th:each="emotion : ${emotions}"
-              th:unless="${emotion.compound}"
-              th:value="${emotion.key}"
-              th:text="${emotion.label}"
-            ></option>
-          </select>
+              <div class="col-sm-4 col-md-3">
+                <label class="form-label small" for="secondary_emotion">Secondary</label>
+                <select class="form-select" id="secondary_emotion">
+                  <option
+                    th:each="emotion : ${emotions}"
+                    th:unless="${emotion.compound}"
+                    th:value="${emotion.key}"
+                    th:text="${emotion.label}"
+                  ></option>
+                </select>
+              </div>
 
-          <p id="compound_emotion" th:text="${email.getCompoundEmotion()}"></p>
+              <div class="col-sm-4 col-md-3">
+                <div class="small text-muted">Compound</div>
+                <div
+                  id="compound_emotion"
+                  class="form-control-plaintext fw-semibold"
+                  aria-live="polite"
+                  th:text="${email.getFixedCompoundEmotion() ?: email.getCompoundEmotion()}"
+                ></div>
+              </div>
 
-          <button id="update_emotion" type="button" class="btn btn-primary">
-            Update
-          </button>
+              <div class="col-auto">
+                <button id="update_emotion" type="button" class="btn btn-primary">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <hr />
         <!-- Email bodies come from external senders: render them in a sandbox with scripts disabled -->
-        <iframe
-          id="email_content"
-          class="w-100 border-0"
-          title="Email content"
-          sandbox="allow-same-origin"
-          th:attr="srcdoc=${email.getBody()}"
-        ></iframe>
+        <div class="card">
+          <iframe
+            id="email_content"
+            class="w-100 border-0 rounded"
+            title="Email content"
+            sandbox="allow-same-origin"
+            th:attr="srcdoc=${email.getBody()}"
+          ></iframe>
+        </div>
       </div>
 
       <script id="emotions-data" type="application/json" th:inline="javascript">

@@ -21,21 +21,21 @@
   const primarySelect = document.getElementById("primary_emotion");
   const secondarySelect = document.getElementById("secondary_emotion");
   const compoundLabel = document.getElementById("compound_emotion");
+  const saveButton = document.getElementById("update_emotion");
+
+  function showCompound() {
+    const key = Emotions.compoundOf(primarySelect.value, secondarySelect.value);
+    compoundLabel.innerText = key ? Emotions.byKey[key].label : "—";
+  }
 
   if (currentPrimary) primarySelect.value = currentPrimary;
   if (currentSecondary) secondarySelect.value = currentSecondary;
-
-  function showCompound() {
-    compoundLabel.innerText = Emotions.compoundOf(
-      primarySelect.value,
-      secondarySelect.value,
-    );
-  }
+  if (currentPrimary && currentSecondary) showCompound();
 
   primarySelect.addEventListener("change", showCompound);
   secondarySelect.addEventListener("change", showCompound);
 
-  document.getElementById("update_emotion").addEventListener("click", () => {
+  saveButton.addEventListener("click", () => {
     const primaryEmotion = primarySelect.value;
     const secondaryEmotion = secondarySelect.value;
 
@@ -55,6 +55,9 @@
       compoundEmotion: Emotions.compoundOf(primaryEmotion, secondaryEmotion),
     };
 
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving…";
+
     fetch(updateUrl, {
       method: "PUT",
       headers: {
@@ -66,14 +69,17 @@
         if (!response.ok) throw new Error("HTTP " + response.status);
 
         Swal.fire({
-          title: "Updated!",
-          text: "The email has been updated.",
+          title: "Saved",
+          text: "The email's emotions have been updated.",
           icon: "success",
         }).then((result) => {
           window.location.reload();
         });
       })
       .catch((error) => {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save";
+
         Swal.fire({
           title: "Error",
           text: "The email could not be updated. Please try again.",

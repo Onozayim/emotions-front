@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -53,6 +55,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class IndexController {
+
+    private static final Logger log = LoggerFactory.getLogger(IndexController.class);
 
     @Value("${app.base-url}")
     private String baseUrl;
@@ -234,7 +238,10 @@ public class IndexController {
             model.addAttribute("success", "An email was sent to create the user");
             return "create-user";
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            // Keep technical details (e.g. mail server errors) in the log, not on the page
+            log.error("Could not send invitation to {}", createUser.getEmail(), e);
+            model.addAttribute("error",
+                    "The invitation could not be sent. Please try again later or contact the administrator.");
             return "create-user";
         }
     }

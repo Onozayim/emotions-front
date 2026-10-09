@@ -1,18 +1,20 @@
 <!doctype html>
 <html
-  lang="es"
+  lang="en"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="layouts/layout"
 >
   <head>
-    <title>Bootstrap demo</title>
+    <title>Dashboard</title>
   </head>
   <body>
     <section layout:fragment="content">
-      <form th:action="@{/}" method="get">
-        <div class="row my-2 mx-2 w-75">
-          <div class="col-md-3">
-            <label class="" for="from">From</label>
+      <div class="container">
+        <h1 class="h3 mb-3">Dashboard</h1>
+
+        <form th:action="@{/}" method="get" class="row g-2 align-items-end mb-4">
+          <div class="col-sm-4 col-md-3">
+            <label class="form-label" for="from">From</label>
             <input
               class="form-control"
               name="from"
@@ -22,8 +24,8 @@
             />
           </div>
 
-          <div class="col-md-3">
-            <label class="" for="to">To</label>
+          <div class="col-sm-4 col-md-3">
+            <label class="form-label" for="to">To</label>
             <input
               class="form-control"
               name="to"
@@ -33,20 +35,95 @@
             />
           </div>
 
-          <div class="col-md-3 d-flex flex-column">
-            <button class="btn btn-primary mt-auto" type="submit">
-              Search
-            </button>
+          <div class="col-auto">
+            <button class="btn btn-primary" type="submit">Apply</button>
+            <a th:href="@{/}" class="btn btn-outline-secondary">Clear</a>
+          </div>
+        </form>
+
+        <div
+          th:if="${#lists.isEmpty(email_counts)}"
+          class="alert alert-secondary"
+        >
+          No emails were analyzed in this period.
+        </div>
+
+        <div th:unless="${#lists.isEmpty(email_counts)}" class="row g-4">
+          <div class="col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h2 class="h6 card-title">Primary emotions</h2>
+                <canvas id="primaryTotalsChart" aria-label="Emails per primary emotion" role="img"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h2 class="h6 card-title">Compound emotions</h2>
+                <canvas id="compoundTotalsChart" aria-label="Emails per compound emotion" role="img"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h2 class="h6 card-title">Primary emotions over time</h2>
+                <canvas id="primaryTrendChart" aria-label="Primary emotions per day" role="img"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                  <h2 class="h6 card-title mb-0">Compound emotions over time</h2>
+                  <div class="d-flex align-items-center gap-2">
+                    <label for="compoundHighlight" class="form-label mb-0 small text-muted">
+                      Highlight
+                    </label>
+                    <select id="compoundHighlight" class="form-select form-select-sm w-auto">
+                      <option
+                        th:each="emotion : ${emotions}"
+                        th:if="${emotion.compound}"
+                        th:value="${emotion.key}"
+                        th:text="${emotion.label}"
+                      ></option>
+                    </select>
+                  </div>
+                </div>
+                <canvas id="compoundTrendChart" aria-label="Compound emotions per day" role="img"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <details class="card">
+              <summary class="card-header">Show totals as a table</summary>
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col">Emotion</th>
+                      <th scope="col">Type</th>
+                      <th scope="col" class="text-end">Emails</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="emotion : ${emotions}">
+                      <td th:text="${emotion.label}">Joy</td>
+                      <td th:text="${emotion.compound} ? 'Compound' : 'Primary'">Primary</td>
+                      <td class="text-end" th:text="${totals[emotion.key]}">0</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
           </div>
         </div>
-      </form>
-
-      <div class="w-75 mx-auto">
-        <canvas id="myChart"></canvas>
-      </div>
-
-      <div class="w-75 mx-auto">
-        <canvas id="myChart2"></canvas>
       </div>
 
       <script id="emotions-data" type="application/json" th:inline="javascript">

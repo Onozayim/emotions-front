@@ -311,13 +311,17 @@ function buildTemplate() {
   };
 }
 
+function showValidationError(text) {
+  Swal.fire({ title: "Can't save yet", text, icon: "warning" });
+}
+
 form.addEventListener("submit", (event) => {
   const template = buildTemplate();
 
   if (template.questions.length === 0) {
     event.preventDefault();
 
-    alert("The survey must contain at least one question.");
+    showValidationError("The survey must contain at least one question.");
 
     return;
   }
@@ -326,7 +330,7 @@ form.addEventListener("submit", (event) => {
     if (question.type === "rating" && question.min >= question.max) {
       event.preventDefault();
 
-      alert(
+      showValidationError(
         `"${question.label}" must have a maximum greater than its minimum.`,
       );
 
@@ -339,7 +343,7 @@ form.addEventListener("submit", (event) => {
     ) {
       event.preventDefault();
 
-      alert(`"${question.label}" must have at least two options.`);
+      showValidationError(`"${question.label}" must have at least two options.`);
 
       return;
     }

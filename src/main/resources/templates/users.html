@@ -18,17 +18,17 @@
           th:each="i: ${users}"
         >
           <div>
-            <div class="fw-bold">
-              <a th:href="@{'/'}" th:text="${i.getEmail()}"></a>
-            </div>
-            <div class="text-muted" th:text="${i.getEmail()}"></div>
+            <div class="fw-bold" th:text="${i.getEmail()}"></div>
+            <div class="text-muted small" th:text="'ID ' + ${i.getId()}"></div>
           </div>
-          <span
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getId()}"
+          <button
+            type="button"
+            class="btn btn-outline-danger btn-sm"
+            th:attr="aria-label='Delete ' + ${i.getEmail()}"
             th:onclick="|deleteUser(${i.getId()})|"
-          ></span>
+          >
+            Delete
+          </button>
         </li>
       </ul>
 
@@ -102,7 +102,7 @@
       <script>
         function deleteUser(id) {
           Swal.fire({
-            title: "Are you sure yo want to delete the user?",
+            title: "Are you sure you want to delete the user?",
             text: "You won't be able to revert this!",
             icon: "warning",
             showCancelButton: true,
@@ -115,6 +115,8 @@
                 method: "DELETE",
               })
                 .then((response) => {
+                  if (!response.ok) throw new Error("HTTP " + response.status);
+
                   Swal.fire({
                     title: "Deleted!",
                     text: "The user has been deleted.",
@@ -123,8 +125,12 @@
                     window.location.reload();
                   });
                 })
-                .catch((response) => {
-                  alert("Un error inexperado ah ocurrido");
+                .catch((error) => {
+                  Swal.fire({
+                    title: "Error",
+                    text: "The user could not be deleted. Please try again.",
+                    icon: "error",
+                  });
                 });
             }
           });

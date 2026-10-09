@@ -8,11 +8,15 @@
     <title>Bootstrap demo</title>
   </head>
   <body>
-    <section layout:fragment="content">
+    <section
+      layout:fragment="content"
+      th:with="fromStr=${from != null ? #dates.format(from, 'yyyy-MM-dd') : null},
+               toStr=${to != null ? #dates.format(to, 'yyyy-MM-dd') : null}"
+    >
       <form th:action="@{/emails}" method="get">
         <div class="row my-2 mx-auto w-75">
           <div class="col-md-3">
-            <label class="" for="date">Emotion</label>
+            <label class="" for="emotion">Emotion</label>
             <select
               class="form-select"
               id="emotion"
@@ -68,24 +72,24 @@
           </div>
 
           <div class="col-md-3">
-            <label class="" for="date">From</label>
+            <label class="" for="from">From</label>
             <input
               class="form-control"
               name="from"
               type="date"
               id="from"
-              th:value="${from}"
+              th:value="${fromStr}"
             />
           </div>
 
           <div class="col-md-3">
-            <label class="" for="date">To</label>
+            <label class="" for="to">To</label>
             <input
               class="form-control"
               name="to"
               type="date"
               id="to"
-              th:value="${to}"
+              th:value="${toStr}"
             />
           </div>
 
@@ -207,7 +211,7 @@
             <a
               class="page-link"
               th:with="prevPage=${page.number - 1}"
-              th:href="@{'?page=' + ${prevPage}}"
+              th:href="@{/emails(page=${prevPage}, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
               >Ant</a
             >
           </li>
@@ -217,7 +221,11 @@
             th:if="${prevDots}"
             th:classappend="${page.first} ? 'disabled' : ''"
           >
-            <a class="page-link" th:href="@{'?page=0'}">1</a>
+            <a
+              class="page-link"
+              th:href="@{/emails(page=0, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
+              >1</a
+            >
           </li>
 
           <li class="page-item" th:if="${prevDots}">
@@ -232,7 +240,7 @@
             <a
               class="page-link"
               th:with="pageNum=${i - 1}"
-              th:href="@{'?page=' + ${pageNum}}"
+              th:href="@{/emails(page=${pageNum}, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
               th:text="${i}"
             ></a>
           </li>
@@ -249,7 +257,7 @@
             <a
               class="page-link"
               th:with="lastPage=${page.totalPages - 1}"
-              th:href="@{'?page=' + ${lastPage}}"
+              th:href="@{/emails(page=${lastPage}, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
               th:text="${page.totalPages}"
             ></a>
           </li>
@@ -258,7 +266,7 @@
             <a
               class="page-link"
               th:with="nextPage=${page.number + 1}"
-              th:href="@{'?page=' + ${nextPage}}"
+              th:href="@{/emails(page=${nextPage}, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
               >Sig</a
             >
           </li>

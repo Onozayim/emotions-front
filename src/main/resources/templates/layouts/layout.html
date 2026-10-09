@@ -46,7 +46,7 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <ul class="nav navbar-nav">
             <a class="nav-link text-white" href="/">Home</a>
-            <a class="nav-link text-white" hsec:authorize="isAuthenticated() "ref="/emails">Emails</a>
+            <a class="nav-link text-white" sec:authorize="isAuthenticated()" href="/emails">Emails</a>
             <a class="nav-link text-white" sec:authorize="isAuthenticated()" href="/users">Users</a>
             <a class="nav-link text-white" sec:authorize="isAuthenticated()" href="/surveys">Surveys</a>
             <a class="nav-link text-white" sec:authorize="isAuthenticated()" href="/survey-templates">Templates</a>

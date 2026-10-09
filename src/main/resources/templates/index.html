@@ -49,8 +49,6 @@
         <canvas id="myChart2"></canvas>
       </div>
 
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
       <script th:inline="javascript">
         const ctx = document.getElementById("myChart");
 
@@ -61,7 +59,7 @@
         const disgust = /*[[${disgust}]]*/ 0;
 
         const surprise = /*[[${surprise}]]*/ 0;
-        const nostalgia = /*[[${sadness}]]*/ 0;
+        const nostalgia = /*[[${nostalgia}]]*/ 0;
         const intrigue = /*[[${intrigue}]]*/ 0;
         const justice = /*[[${justice}]]*/ 0;
         const contempt = /*[[${contempt}]]*/ 0;
@@ -71,16 +69,10 @@
         const aversion = /*[[${aversion}]]*/ 0;
         const hate = /*[[${hate}]]*/ 0;
 
-        const sec_joy = /*[[${joy}]]*/ 0;
-        const sec_sadness = /*[[${sadness}]]*/ 0;
-        const sec_anger = /*[[${anger}]]*/ 0;
-        const sec_fear = /*[[${fear}]]*/ 0;
-        const sec_surprise = /*[[${surprise}]]*/ 0;
-
         new Chart(ctx, {
           type: "bar",
           data: {
-            labels: ["Joy", "Sadness", "Anger", "Fear", "Disgust", "Surprise", "Nostalgia", "Ingrigue", "Justice", "Contempt", "Anxiety", "Betrayal", "Repulsion", "Aversion", "Hate"],
+            labels: ["Joy", "Sadness", "Anger", "Fear", "Disgust", "Surprise", "Nostalgia", "Intrigue", "Justice", "Contempt", "Anxiety", "Betrayal", "Repulsion", "Aversion", "Hate"],
             datasets: [
               {
                 data: [joy, sadness, anger, fear, disgust, surprise, nostalgia, intrigue, justice, contempt, anxiety, betrayal, repulsion, aversion, hate],
@@ -143,7 +135,7 @@
         const sadnessData = stats.map(x => x.sadness);
         const angerData = stats.map(x => x.anger);
         const fearData = stats.map(x => x.fear);
-        const disgustData = stats.map(x => x.surprise);
+        const disgustData = stats.map(x => x.disgust);
         const surpriseData = stats.map(x => x.surprise);
         const nostalgiaData = stats.map(x => x.nostalgia);
         const intrigueData = stats.map(x => x.intrigue);
@@ -186,7 +178,7 @@
               },
               {
                   label: "Disgust",
-                  data: surpriseData,
+                  data: disgustData,
                   borderColor: "#FB8C00",
                   tension: 0.3
               },

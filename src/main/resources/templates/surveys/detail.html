@@ -54,7 +54,8 @@
 
               <div class="col-md-9">
                 <span
-                  class="badge bg-secondary"
+                  class="badge badge-soft"
+                  th:classappend="${'badge-status-' + #strings.toLowerCase(surveyAnswer.status.name())}"
                   th:text="${surveyAnswer.status}"
                 >
                   ANSWERED
@@ -120,7 +121,11 @@
               <strong>Emotion</strong>
 
               <div>
-                <span class="badge bg-primary" th:text="${emotion}">
+                <span
+                  class="badge badge-soft"
+                  th:classappend="${'badge-emotion-' + #strings.toLowerCase(emotion)}"
+                  th:text="${emotion}"
+                >
                   positive
                 </span>
               </div>

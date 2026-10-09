@@ -40,7 +40,8 @@
 
                 <td>
                   <span
-                    class="badge bg-secondary"
+                    class="badge badge-soft"
+                    th:classappend="${'badge-emotion-' + #strings.toLowerCase(template.emotion)}"
                     th:text="${template.emotion}"
                   >
                     positive

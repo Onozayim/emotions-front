@@ -13,17 +13,24 @@
         <h1 th:text="${email.getSubject()}"></h1>
         <h6 th:text="${email.getFrom()}"></h6>
 
-        <div class="w-25">
+        <div
+          id="email-editor"
+          class="w-25"
+          th:data-update-url="@{/email/{id}(id=${email.getId()})}"
+          th:data-current-primary="${email.getFixedEmotion() ?: email.getEmotion()}"
+          th:data-current-secondary="${email.getFixedSecondaryEmotion() ?: email.getSecondaryEmotion()}"
+        >
           <select
             class="form-select form-select-sm w-25 mb-2"
             name="primary_emotion"
             id="primary_emotion"
           >
-            <option value="joy">Joy</option>
-            <option value="sadness">Sadness</option>
-            <option value="anger">Anger</option>
-            <option value="fear">Fear</option>
-            <option value="disgust">Disgust</option>
+            <option
+              th:each="emotion : ${emotions}"
+              th:unless="${emotion.compound}"
+              th:value="${emotion.key}"
+              th:text="${emotion.label}"
+            ></option>
           </select>
 
           <select
@@ -31,16 +38,17 @@
             name="secondary_emotion"
             id="secondary_emotion"
           >
-            <option value="joy">Joy</option>
-            <option value="sadness">Sadness</option>
-            <option value="anger">Anger</option>
-            <option value="fear">Fear</option>
-            <option value="disgust">Disgust</option>
+            <option
+              th:each="emotion : ${emotions}"
+              th:unless="${emotion.compound}"
+              th:value="${emotion.key}"
+              th:text="${emotion.label}"
+            ></option>
           </select>
 
           <p id="compound_emotion" th:text="${email.getCompoundEmotion()}"></p>
 
-          <button class="btn btn-primary" onclick="updateEmotion()">
+          <button id="update_emotion" type="button" class="btn btn-primary">
             Update
           </button>
         </div>
@@ -56,155 +64,11 @@
         ></iframe>
       </div>
 
-      <script th:inline="javascript">
-        var id = /*[[${email.getId()}]]*/ "";
-        const currentPrimary = /*[[${email.getFixedEmotion() ?: email.getEmotion()}]]*/ null;
-        const currentSecondary = /*[[${email.getFixedSecondaryEmotion() ?: email.getSecondaryEmotion()}]]*/ null;
-
-        const emailFrame = document.getElementById("email_content");
-
-        function resizeEmailFrame() {
-          const doc = emailFrame.contentDocument;
-          if (doc && doc.documentElement) {
-            emailFrame.style.height = doc.documentElement.scrollHeight + "px";
-          }
-        }
-
-        emailFrame.addEventListener("load", resizeEmailFrame);
-        if (emailFrame.contentDocument?.readyState === "complete") {
-          resizeEmailFrame();
-        }
-
-        const pr_emotion_change = document.getElementById("primary_emotion");
-        const sc_emotion_change = document.getElementById("secondary_emotion");
-
-        if (currentPrimary) pr_emotion_change.value = currentPrimary;
-        if (currentSecondary) sc_emotion_change.value = currentSecondary;
-
-        pr_emotion_change.addEventListener("change", (event) => {
-          const primary_emotion = event.target.value;
-          const secondary_emotion = sc_emotion_change.value;
-          document.getElementById("compound_emotion").innerText =
-            getCompoundEmotion(primary_emotion, secondary_emotion);
-        });
-
-        sc_emotion_change.addEventListener("change", (event) => {
-          const secondary_emotion = event.target.value;
-          const primary_emotion = pr_emotion_change.value;
-
-          document.getElementById("compound_emotion").innerText =
-            getCompoundEmotion(primary_emotion, secondary_emotion);
-        });
-
-        function getCompoundEmotion(primary_emotion, secondary_emotion) {
-          let compound_emotion = "";
-
-          if (
-            (primary_emotion == "joy" && secondary_emotion == "sadness") ||
-            (primary_emotion == "sadness" && secondary_emotion == "joy")
-          )
-            compound_emotion = "nostalgia";
-          else if (
-            (primary_emotion == "joy" && secondary_emotion == "disgust") ||
-            (primary_emotion == "disgust" && secondary_emotion == "joy")
-          )
-            compound_emotion = "intrigue";
-          else if (
-            (primary_emotion == "joy" && secondary_emotion == "fear") ||
-            (primary_emotion == "fear" && secondary_emotion == "joy")
-          )
-            compound_emotion = "surprise";
-          else if (
-            (primary_emotion == "joy" && secondary_emotion == "anger") ||
-            (primary_emotion == "anger" && secondary_emotion == "joy")
-          )
-            compound_emotion = "justice";
-          else if (
-            (primary_emotion == "sadness" && secondary_emotion == "disgust") ||
-            (primary_emotion == "disgust" && secondary_emotion == "sadness")
-          )
-            compound_emotion = "contempt";
-          else if (
-            (primary_emotion == "sadness" && secondary_emotion == "fear") ||
-            (primary_emotion == "fear" && secondary_emotion == "sadness")
-          )
-            compound_emotion = "anxiety";
-          else if (
-            (primary_emotion == "sadness" && secondary_emotion == "anger") ||
-            (primary_emotion == "anger" && secondary_emotion == "sadness")
-          )
-            compound_emotion = "betrayal";
-          else if (
-            (primary_emotion == "disgust" && secondary_emotion == "fear") ||
-            (primary_emotion == "fear" && secondary_emotion == "disgust")
-          )
-            compound_emotion = "repulsion";
-          else if (
-            (primary_emotion == "disgust" && secondary_emotion == "anger") ||
-            (primary_emotion == "anger" && secondary_emotion == "disgust")
-          )
-            compound_emotion = "aversion";
-          else if (
-            (primary_emotion == "fear" && secondary_emotion == "anger") ||
-            (primary_emotion == "anger" && secondary_emotion == "fear")
-          )
-            compound_emotion = "hate";
-
-          return compound_emotion;
-        }
-
-        function updateEmotion() {
-          const primaryEmotion = pr_emotion_change.value;
-          const secondaryEmotion = sc_emotion_change.value;
-
-          if (primaryEmotion == secondaryEmotion) {
-            Swal.fire({
-              title: "Nothing was saved",
-              text: "Primary and secondary emotions must be different.",
-              icon: "warning",
-            });
-
-            return;
-          }
-
-          const compoundEmotion = getCompoundEmotion(
-            primaryEmotion,
-            secondaryEmotion,
-          );
-
-          const body = {
-            primaryEmotion,
-            secondaryEmotion,
-            compoundEmotion,
-          };
-
-          fetch("/email/" + id, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-          })
-            .then((response) => {
-              if (!response.ok) throw new Error("HTTP " + response.status);
-
-              Swal.fire({
-                title: "Updated!",
-                text: "The email has been updated.",
-                icon: "success",
-              }).then((result) => {
-                window.location.reload();
-              });
-            })
-            .catch((error) => {
-              Swal.fire({
-                title: "Error",
-                text: "The email could not be updated. Please try again.",
-                icon: "error",
-              });
-            });
-        }
+      <script id="emotions-data" type="application/json" th:inline="javascript">
+        [[${emotions}]]
       </script>
+      <script th:src="@{/js/emotions.js}" defer></script>
+      <script th:src="@{/js/email.js}" defer></script>
     </section>
   </body>
 </html>

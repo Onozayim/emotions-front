@@ -8,66 +8,19 @@
     <title>Bootstrap demo</title>
   </head>
   <body>
-    <section
-      layout:fragment="content"
-      th:with="fromStr=${from != null ? #dates.format(from, 'yyyy-MM-dd') : null},
-               toStr=${to != null ? #dates.format(to, 'yyyy-MM-dd') : null}"
-    >
+    <section layout:fragment="content">
       <form th:action="@{/emails}" method="get">
         <div class="row my-2 mx-auto w-75">
           <div class="col-md-3">
             <label class="" for="emotion">Emotion</label>
-            <select
-              class="form-select"
-              id="emotion"
-              name="emotion"
-              th:value="${emotion}"
-            >
+            <select class="form-select" id="emotion" name="emotion">
               <option value="">-- All --</option>
-              <option th:selected="${emotion == 'joy'}" value="joy">joy</option>
-              <option th:selected="${emotion == 'sadness'}" value="sadness">
-                sadness
-              </option>
-              <option th:selected="${emotion == 'anger'}" value="anger">
-                anger
-              </option>
-              <option th:selected="${emotion == 'fear'}" value="fear">
-                fear
-              </option>
-              <option th:selected="${emotion == 'disgust'}" value="disgust">
-                disgust
-              </option>
-
-              <option th:selected="${emotion == 'surprise'}" value="surprise">
-                surprise
-              </option>
-              <option th:selected="${emotion == 'nostalgia'}" value="nostalgia">
-                nostalgia
-              </option>
-              <option th:selected="${emotion == 'intrigue'}" value="intrigue">
-                intrigue
-              </option>
-              <option th:selected="${emotion == 'justice'}" value="justice">
-                justice
-              </option>
-              <option th:selected="${emotion == 'contempt'}" value="contempt">
-                contempt
-              </option>
-              <option th:selected="${emotion == 'anxiety'}" value="anxiety">
-                anxiety
-              </option>
-              <option th:selected="${emotion == 'betrayal'}" value="betrayal">
-                betrayal
-              </option>
-              <option th:selected="${emotion == 'repulsion'}" value="repulsion">
-                repulsion
-              </option>
-              <option th:selected="${emotion == 'aversion'}" value="aversion">
-                aversion
-              </option>
-              <option th:selected="${emotion == 'hate'}" value="hate">
-                hate
-              </option>
+              <option
+                th:each="e : ${emotions}"
+                th:value="${e.key}"
+                th:text="${e.key}"
+                th:selected="${emotion == e.key}"
+              ></option>
             </select>
           </div>
 
@@ -78,7 +31,7 @@
               name="from"
               type="date"
               id="from"
-              th:value="${fromStr}"
+              th:value="${from != null ? #dates.format(from, 'yyyy-MM-dd') : ''}"
             />
           </div>
 
@@ -89,7 +42,7 @@
               name="to"
               type="date"
               id="to"
-              th:value="${toStr}"
+              th:value="${to != null ? #dates.format(to, 'yyyy-MM-dd') : ''}"
             />
           </div>
 
@@ -115,163 +68,24 @@
             </div>
             <div class="text-muted" th:text="${i.getSubject()}"></div>
           </div>
-          <span
-            th:if="${#strings.contains(i.getEmotion(), 'joy')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getEmotion(), 'sadness')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getEmotion(), 'anger')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getEmotion(), 'fear')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getEmotion(), 'disgust')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'nostalgia')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'intrigue')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'justice')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'contempt')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'anxiety')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'betrayal')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'repulsion')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'aversion')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
-          <span
-            th:if="${#strings.contains(i.getCompoundEmotion(), 'hate')}"
-            style="width: 70px"
-            class="badge rounded-pill text-bg-danger"
-            th:text="${i.getCompoundEmotion()}"
-          ></span>
+          <div class="d-flex gap-1">
+            <span
+              th:unless="${#strings.isEmpty(i.getEmotion())}"
+              style="width: 70px"
+              class="badge rounded-pill text-bg-danger"
+              th:text="${i.getEmotion()}"
+            ></span>
+            <span
+              th:unless="${#strings.isEmpty(i.getCompoundEmotion())}"
+              style="width: 70px"
+              class="badge rounded-pill text-bg-danger"
+              th:text="${i.getCompoundEmotion()}"
+            ></span>
+          </div>
         </li>
       </ul>
 
-      <div class="w-75 m-auto">
-        <ul class="pagination mb-0 mt-3">
-          <li
-            class="page-item"
-            th:classappend="${page.first} ? 'disabled' : ''"
-          >
-            <a
-              class="page-link"
-              th:with="prevPage=${page.number - 1}"
-              th:href="@{/emails(page=${prevPage}, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
-              >Ant</a
-            >
-          </li>
-
-          <li
-            class="page-item"
-            th:if="${prevDots}"
-            th:classappend="${page.first} ? 'disabled' : ''"
-          >
-            <a
-              class="page-link"
-              th:href="@{/emails(page=0, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
-              >1</a
-            >
-          </li>
-
-          <li class="page-item" th:if="${prevDots}">
-            <a class="page-link">...</a>
-          </li>
-
-          <li
-            class="page-item"
-            th:each="i: ${pageNumbers}"
-            th:classappend="${i == page.number + 1} ? 'active' : ''"
-          >
-            <a
-              class="page-link"
-              th:with="pageNum=${i - 1}"
-              th:href="@{/emails(page=${pageNum}, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
-              th:text="${i}"
-            ></a>
-          </li>
-
-          <li class="page-item" th:if="${nextDots}">
-            <a class="page-link">...</a>
-          </li>
-
-          <li
-            class="page-item"
-            th:if="${nextDots}"
-            th:classappend="${page.last} ? 'disabled' : ''"
-          >
-            <a
-              class="page-link"
-              th:with="lastPage=${page.totalPages - 1}"
-              th:href="@{/emails(page=${lastPage}, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
-              th:text="${page.totalPages}"
-            ></a>
-          </li>
-
-          <li class="page-item" th:classappend="${page.last} ? 'disabled' : ''">
-            <a
-              class="page-link"
-              th:with="nextPage=${page.number + 1}"
-              th:href="@{/emails(page=${nextPage}, emotion=${emotion}, from=${fromStr}, to=${toStr})}"
-              >Sig</a
-            >
-          </li>
-        </ul>
-      </div>
+      <nav th:replace="~{fragments/pagination :: pagination}"></nav>
     </section>
   </body>
 </html>

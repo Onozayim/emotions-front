@@ -12,7 +12,7 @@
       <form th:action="@{/}" method="get">
         <div class="row my-2 mx-2 w-75">
           <div class="col-md-3">
-            <label class="" for="date">From</label>
+            <label class="" for="from">From</label>
             <input
               class="form-control"
               name="from"
@@ -23,7 +23,7 @@
           </div>
 
           <div class="col-md-3">
-            <label class="" for="date">To</label>
+            <label class="" for="to">To</label>
             <input
               class="form-control"
               name="to"
@@ -49,210 +49,14 @@
         <canvas id="myChart2"></canvas>
       </div>
 
-      <script th:inline="javascript">
-        const ctx = document.getElementById("myChart");
-
-        const joy = /*[[${joy}]]*/ 0;
-        const sadness = /*[[${sadness}]]*/ 0;
-        const anger = /*[[${anger}]]*/ 0;
-        const fear = /*[[${fear}]]*/ 0;
-        const disgust = /*[[${disgust}]]*/ 0;
-
-        const surprise = /*[[${surprise}]]*/ 0;
-        const nostalgia = /*[[${nostalgia}]]*/ 0;
-        const intrigue = /*[[${intrigue}]]*/ 0;
-        const justice = /*[[${justice}]]*/ 0;
-        const contempt = /*[[${contempt}]]*/ 0;
-        const anxiety = /*[[${anxiety}]]*/ 0;
-        const betrayal = /*[[${betrayal}]]*/ 0;
-        const repulsion = /*[[${repulsion}]]*/ 0;
-        const aversion = /*[[${aversion}]]*/ 0;
-        const hate = /*[[${hate}]]*/ 0;
-
-        new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: ["Joy", "Sadness", "Anger", "Fear", "Disgust", "Surprise", "Nostalgia", "Intrigue", "Justice", "Contempt", "Anxiety", "Betrayal", "Repulsion", "Aversion", "Hate"],
-            datasets: [
-              {
-                data: [joy, sadness, anger, fear, disgust, surprise, nostalgia, intrigue, justice, contempt, anxiety, betrayal, repulsion, aversion, hate],
-                backgroundColor: [
-                  "#FFD54F", // Joy - amarillo
-                  "#64B5F6", // Sadness - azul
-                  "#EF5350", // Anger - rojo
-                  "#7E57C2", // Fear - morado
-                  "#26A69A", // Surprise - verde azulado
-
-                  "#FFD54F", // Joy - amarillo
-                  "#64B5F6", // Sadness - azul
-                  "#EF5350", // Anger - rojo
-                  "#7E57C2", // Fear - morado
-                  "#26A69A", // Surprise - verde azulado
-                  "#FFD54F", // Joy - amarillo
-                  "#64B5F6", // Sadness - azul
-                  "#EF5350", // Anger - rojo
-                  "#7E57C2", // Fear - morado
-                  "#26A69A", // Surprise - verde azulado
-                ],
-                borderColor: [
-                  "#FFC107",
-                  "#1E88E5",
-                  "#D32F2F",
-                  "#5E35B1",
-                  "#00897B",
-
-                  "#FFC107",
-                  "#1E88E5",
-                  "#D32F2F",
-                  "#5E35B1",
-                  "#00897B",
-                  "#FFC107",
-                  "#1E88E5",
-                  "#D32F2F",
-                  "#5E35B1",
-                  "#00897B",
-                ],
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-
-        const ctx2 = document.getElementById("myChart2");
-
-        const stats = /*[[${email_counts}]]*/ 0;
-
-        const labels = stats.map(x => x.createdAt);
-
-        const joyData = stats.map(x => x.joy);
-        const sadnessData = stats.map(x => x.sadness);
-        const angerData = stats.map(x => x.anger);
-        const fearData = stats.map(x => x.fear);
-        const disgustData = stats.map(x => x.disgust);
-        const surpriseData = stats.map(x => x.surprise);
-        const nostalgiaData = stats.map(x => x.nostalgia);
-        const intrigueData = stats.map(x => x.intrigue);
-        const justiceData = stats.map(x => x.justice);
-        const contemptData = stats.map(x => x.contempt);
-        const anxietyData = stats.map(x => x.anxiety);
-        const betrayalData = stats.map(x => x.betrayal);
-        const repulsionData = stats.map(x => x.repulsion);
-        const aversionData = stats.map(x => x.aversion);
-        const hateData = stats.map(x => x.hate);
-
-        new Chart(ctx2, {
-          type: "line",
-          data: {
-            labels:labels,
-            datasets: [
-              {
-                  label: "Joy",
-                  data: joyData,
-                  borderColor: "#FDD835",
-                  tension: 0.3
-              },
-              {
-                  label: "Sadness",
-                  data: sadnessData,
-                  borderColor: "#1E88E5",
-                  tension: 0.3
-              },
-              {
-                  label: "Anger",
-                  data: angerData,
-                  borderColor: "#E53935",
-                  tension: 0.3
-              },
-              {
-                  label: "Fear",
-                  data: fearData,
-                  borderColor: "#8E24AA",
-                  tension: 0.3
-              },
-              {
-                  label: "Disgust",
-                  data: disgustData,
-                  borderColor: "#FB8C00",
-                  tension: 0.3
-              },
-              {
-                  label: "Surprise",
-                  data: surpriseData,
-                  borderColor: "#FDD835",
-                  tension: 0.3
-              },
-              {
-                  label: "Nostalgia",
-                  data: nostalgiaData,
-                  borderColor: "#1E88E5",
-                  tension: 0.3
-              },
-              {
-                  label: "Intrigue",
-                  data: intrigueData,
-                  borderColor: "#E53935",
-                  tension: 0.3
-              },
-              {
-                  label: "Justice",
-                  data: justiceData,
-                  borderColor: "#8E24AA",
-                  tension: 0.3
-              },
-              {
-                  label: "Contempt",
-                  data: contemptData,
-                  borderColor: "#FB8C00",
-                  tension: 0.3
-              },
-              {
-                  label: "Anxiety",
-                  data: anxietyData,
-                  borderColor: "#FDD835",
-                  tension: 0.3
-              },
-              {
-                  label: "Betrayal",
-                  data: betrayalData,
-                  borderColor: "#1E88E5",
-                  tension: 0.3
-              },
-              {
-                  label: "Repulsion",
-                  data: repulsionData,
-                  borderColor: "#E53935",
-                  tension: 0.3
-              },
-              {
-                  label: "Aversion",
-                  data: aversionData,
-                  borderColor: "#8E24AA",
-                  tension: 0.3
-              },
-              {
-                  label: "Hate",
-                  data: hateData,
-                  borderColor: "#FB8C00",
-                  tension: 0.3
-              },
-            ],
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
+      <script id="emotions-data" type="application/json" th:inline="javascript">
+        [[${emotions}]]
       </script>
+      <script id="dashboard-data" type="application/json" th:inline="javascript">
+        { "totals": [[${totals}]], "series": [[${email_counts}]] }
+      </script>
+      <script th:src="@{/js/emotions.js}" defer></script>
+      <script th:src="@{/js/dashboard.js}" defer></script>
     </section>
   </body>
 </html>

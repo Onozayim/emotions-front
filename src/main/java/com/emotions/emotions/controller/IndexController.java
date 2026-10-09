@@ -4,7 +4,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,29 +103,25 @@ public class IndexController {
 
         List<EmailCount> email_counts = emailCountService.getEmailCounts(spec);
 
-        model.addAttribute("joy", email_count_total.totalJoy());
-        model.addAttribute("sadness", email_count_total.totalSadness());
-        model.addAttribute("anger", email_count_total.totalAnger());
-        model.addAttribute("fear", email_count_total.totalFear());
-        model.addAttribute("disgust", email_count_total.totalDisgust());
+        // Keyed by Emotion.getKey() so the dashboard script can look totals up per emotion
+        Map<String, Long> totals = new LinkedHashMap<>();
+        totals.put("joy", email_count_total.totalJoy());
+        totals.put("sadness", email_count_total.totalSadness());
+        totals.put("anger", email_count_total.totalAnger());
+        totals.put("fear", email_count_total.totalFear());
+        totals.put("disgust", email_count_total.totalDisgust());
+        totals.put("surprise", email_count_total.totalSurprise());
+        totals.put("nostalgia", email_count_total.totalNostalgia());
+        totals.put("intrigue", email_count_total.totalIntrigue());
+        totals.put("justice", email_count_total.totalJustice());
+        totals.put("contempt", email_count_total.totalContempt());
+        totals.put("anxiety", email_count_total.totalAnxiety());
+        totals.put("betrayal", email_count_total.totalBetrayal());
+        totals.put("repulsion", email_count_total.totalRepulsion());
+        totals.put("aversion", email_count_total.totalAversion());
+        totals.put("hate", email_count_total.totalHate());
 
-        model.addAttribute("surprise", email_count_total.totalSurprise());
-        model.addAttribute("nostalgia", email_count_total.totalNostalgia());
-        model.addAttribute("intrigue", email_count_total.totalIntrigue());
-        model.addAttribute("justice", email_count_total.totalJustice());
-        model.addAttribute("contempt", email_count_total.totalContempt());
-        model.addAttribute("anxiety", email_count_total.totalAnxiety());
-        model.addAttribute("betrayal", email_count_total.totalBetrayal());
-        model.addAttribute("repulsion", email_count_total.totalRepulsion());
-        model.addAttribute("aversion", email_count_total.totalAversion());
-        model.addAttribute("hate", email_count_total.totalHate());
-
-        model.addAttribute("sec_joy", email_count_total.totalSecJoy());
-        model.addAttribute("sec_sadness", email_count_total.totalSecSadness());
-        model.addAttribute("sec_anger", email_count_total.totalSecAnger());
-        model.addAttribute("sec_fear", email_count_total.totalSecFear());
-        model.addAttribute("sec_surprise", email_count_total.totalSecDisgust());
-
+        model.addAttribute("totals", totals);
         model.addAttribute("email_counts", email_counts);
 
         System.out.println(email_counts);

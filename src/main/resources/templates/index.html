@@ -67,6 +67,33 @@
             </div>
           </div>
 
+          <!-- Controls for both "over time" charts below -->
+          <div class="col-12 d-flex flex-wrap align-items-center gap-3">
+            <h2 class="h5 mb-0 me-auto">Over time</h2>
+
+            <div class="d-flex align-items-center gap-2">
+              <span class="small text-muted" id="trendModeLabel">Show</span>
+              <div class="btn-group btn-group-sm" role="group" aria-labelledby="trendModeLabel">
+                <input type="radio" class="btn-check" name="trendMode" id="trendModeCount" value="count" checked />
+                <label class="btn btn-outline-secondary" for="trendModeCount">Count</label>
+                <input type="radio" class="btn-check" name="trendMode" id="trendModePercent" value="percent" />
+                <label class="btn btn-outline-secondary" for="trendModePercent">% of emails</label>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <span class="small text-muted" id="trendGroupLabel">Group by</span>
+              <div class="btn-group btn-group-sm" role="group" aria-labelledby="trendGroupLabel">
+                <input type="radio" class="btn-check" name="trendGroup" id="trendGroupDay" value="day" checked />
+                <label class="btn btn-outline-secondary" for="trendGroupDay">Day</label>
+                <input type="radio" class="btn-check" name="trendGroup" id="trendGroupWeek" value="week" />
+                <label class="btn btn-outline-secondary" for="trendGroupWeek">Week</label>
+                <input type="radio" class="btn-check" name="trendGroup" id="trendGroupMonth" value="month" />
+                <label class="btn btn-outline-secondary" for="trendGroupMonth">Month</label>
+              </div>
+            </div>
+          </div>
+
           <div class="col-12">
             <div class="card">
               <div class="card-body">
@@ -130,7 +157,7 @@
         [[${emotions}]]
       </script>
       <script id="dashboard-data" type="application/json" th:inline="javascript">
-        { "totals": [[${totals}]], "series": [[${email_counts}]] }
+        { "totals": [[${totals}]], "series": [[${email_counts}]], "from": [[${from}]], "to": [[${to}]] }
       </script>
       <script th:src="@{/js/emotions.js}" defer></script>
       <script th:src="@{/js/dashboard.js}" defer></script>

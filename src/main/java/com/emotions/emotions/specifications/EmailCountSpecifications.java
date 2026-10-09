@@ -19,6 +19,6 @@ public class EmailCountSpecifications {
         if (to == null)
             return Specification.unrestricted();
 
-        return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("createdAt"), to);
+        return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("createdAt"), to);
     }
 }

@@ -1,6 +1,7 @@
 package com.emotions.emotions.helpers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +16,11 @@ public class GlobalModelAdvice {
     @ModelAttribute("emotions")
     public List<Emotion> emotions() {
         return Emotion.ALL;
+    }
+
+    @ModelAttribute("emotionsByKey")
+    public Map<String, Emotion> emotionsByKey() {
+        return Emotion.BY_KEY;
     }
 
     /** Request path without the context path, used to highlight the active navbar link. */

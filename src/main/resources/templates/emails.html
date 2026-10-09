@@ -75,17 +75,26 @@
                 <span th:text="${#temporals.format(i.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></span>
               </div>
             </div>
-            <div class="d-flex gap-1 flex-shrink-0">
+            <!-- Badges use each emotion's color from Emotion.java; unknown values stay gray -->
+            <div
+              class="d-flex gap-1 flex-shrink-0"
+              th:with="primaryEmotion=${emotionsByKey[#strings.toLowerCase(i.getEmotion() ?: '')]},
+                       compoundEmotion=${emotionsByKey[#strings.toLowerCase(i.getCompoundEmotion() ?: '')]}"
+            >
               <span
                 th:unless="${#strings.isEmpty(i.getEmotion())}"
-                class="badge rounded-pill text-bg-secondary"
-                th:title="'Primary emotion'"
+                class="badge rounded-pill"
+                th:classappend="${primaryEmotion == null} ? 'text-bg-secondary'"
+                th:style="${primaryEmotion != null} ? |background-color: ${primaryEmotion.color}; color: ${primaryEmotion.textColor}|"
+                title="Primary emotion"
                 th:text="${#strings.capitalize(i.getEmotion())}"
               ></span>
               <span
                 th:unless="${#strings.isEmpty(i.getCompoundEmotion())}"
-                class="badge rounded-pill text-bg-light border"
-                th:title="'Compound emotion'"
+                class="badge rounded-pill"
+                th:classappend="${compoundEmotion == null} ? 'text-bg-secondary'"
+                th:style="${compoundEmotion != null} ? |background-color: ${compoundEmotion.color}; color: ${compoundEmotion.textColor}|"
+                title="Compound emotion"
                 th:text="${#strings.capitalize(i.getCompoundEmotion())}"
               ></span>
             </div>

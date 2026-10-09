@@ -1,6 +1,6 @@
 <!doctype html>
 <html
-  lang="es"
+  lang="en"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layouts/layout}"
@@ -11,8 +11,8 @@
 
   <body>
     <section layout:fragment="content">
-      <div class="container py-4">
-        <h1 class="mb-4">Surveys</h1>
+      <div class="container">
+        <h1 class="h3 mb-3">Surveys</h1>
 
         <!-- Filters -->
         <form method="get" th:action="@{/surveys}" class="row g-3 mb-4">
@@ -119,7 +119,8 @@
 
                 <td>
                   <span
-                    class="badge bg-secondary"
+                    class="badge badge-soft"
+                    th:classappend="${'badge-emotion-' + #strings.toLowerCase(survey.survey.emotion)}"
                     th:text="${survey.survey.emotion}"
                   >
                     positive
@@ -127,7 +128,11 @@
                 </td>
 
                 <td>
-                  <span class="badge bg-secondary" th:text="${survey.status}">
+                  <span
+                    class="badge badge-soft"
+                    th:classappend="${'badge-status-' + #strings.toLowerCase(survey.status.name())}"
+                    th:text="${survey.status}"
+                  >
                     ANSWERED
                   </span>
                 </td>
@@ -180,122 +185,7 @@
 
         <!-- Pagination -->
 
-        <nav th:if="${page.totalPages > 1}">
-          <ul class="pagination justify-content-center mt-3">
-            <!-- Previous -->
-
-            <li class="page-item" th:classappend="${page.first} ? 'disabled'">
-              <a
-                class="page-link"
-                th:href="@{/surveys(
-              page=${page.number - 1},
-              size=${page.size},
-              email=${email},
-              from=${from},
-              to=${to},
-              emotion=${emotion},
-              status=${status}
-            )}"
-              >
-                Previous
-              </a>
-            </li>
-
-            <!-- First page -->
-
-            <li class="page-item" th:if="${prevDots}">
-              <a
-                class="page-link"
-                th:href="@{/surveys(
-              page=0,
-              size=${page.size},
-              email=${email},
-              from=${from},
-              to=${to},
-              emotion=${emotion},
-              status=${status}
-            )}"
-              >
-                1
-              </a>
-            </li>
-
-            <!-- Previous dots -->
-
-            <li class="page-item disabled" th:if="${prevDots}">
-              <span class="page-link">...</span>
-            </li>
-
-            <!-- Pages -->
-
-            <li
-              class="page-item"
-              th:each="i : ${pageNumbers}"
-              th:classappend="${i == page.number + 1} ? 'active'"
-            >
-              <a
-                class="page-link"
-                th:with="pageNum=${i - 1}"
-                th:href="@{/surveys(
-              page=${pageNum},
-              size=${page.size},
-              email=${email},
-              from=${from},
-              to=${to},
-              emotion=${emotion},
-              status=${status}
-            )}"
-                th:text="${i}"
-              >
-              </a>
-            </li>
-
-            <!-- Next dots -->
-
-            <li class="page-item disabled" th:if="${nextDots}">
-              <span class="page-link">...</span>
-            </li>
-
-            <!-- Last page -->
-
-            <li class="page-item" th:if="${nextDots}">
-              <a
-                class="page-link"
-                th:with="lastPage=${page.totalPages - 1}"
-                th:href="@{/surveys(
-              page=${lastPage},
-              size=${page.size},
-              email=${email},
-              from=${from},
-              to=${to},
-              emotion=${emotion},
-              status=${status}
-            )}"
-                th:text="${page.totalPages}"
-              >
-              </a>
-            </li>
-
-            <!-- Next -->
-
-            <li class="page-item" th:classappend="${page.last} ? 'disabled'">
-              <a
-                class="page-link"
-                th:href="@{/surveys(
-              page=${page.number + 1},
-              size=${page.size},
-              email=${email},
-              from=${from},
-              to=${to},
-              emotion=${emotion},
-              status=${status}
-            )}"
-              >
-                Next
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <nav th:replace="~{fragments/pagination :: pagination}"></nav>
       </div>
     </section>
   </body>

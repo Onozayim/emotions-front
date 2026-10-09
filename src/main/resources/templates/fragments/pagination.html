@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <!--
+      Shared pagination. Reads ${page}, ${pageNumbers}, ${prevDots} and ${nextDots}
+      from the model (see PaginatorController). Links keep the current query string.
+      Usage: <nav th:replace="~{fragments/pagination :: pagination}"></nav>
+    -->
+    <nav th:fragment="pagination" th:if="${page.totalPages > 1}" aria-label="Pagination">
+      <ul class="pagination justify-content-center mt-3">
+        <li class="page-item" th:classappend="${page.first} ? 'disabled'">
+          <a class="page-link" th:href="${@pageLinks.to(page.number - 1)}">Previous</a>
+        </li>
+
+        <li class="page-item" th:if="${prevDots}">
+          <a class="page-link" th:href="${@pageLinks.to(0)}">1</a>
+        </li>
+
+        <li class="page-item disabled" th:if="${prevDots}">
+          <span class="page-link">...</span>
+        </li>
+
+        <li
+          class="page-item"
+          th:each="i : ${pageNumbers}"
+          th:classappend="${i == page.number + 1} ? 'active'"
+        >
+          <a
+            class="page-link"
+            th:href="${@pageLinks.to(i - 1)}"
+            th:text="${i}"
+            th:attr="aria-current=${i == page.number + 1} ? 'page' : null"
+          ></a>
+        </li>
+
+        <li class="page-item disabled" th:if="${nextDots}">
+          <span class="page-link">...</span>
+        </li>
+
+        <li class="page-item" th:if="${nextDots}">
+          <a
+            class="page-link"
+            th:href="${@pageLinks.to(page.totalPages - 1)}"
+            th:text="${page.totalPages}"
+          ></a>
+        </li>
+
+        <li class="page-item" th:classappend="${page.last} ? 'disabled'">
+          <a class="page-link" th:href="${@pageLinks.to(page.number + 1)}">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </body>
+</html>

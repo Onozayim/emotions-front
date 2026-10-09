@@ -1,17 +1,17 @@
 <!doctype html>
 <html
-  lang="es"
+  lang="en"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layouts/layout}"
 >
   <head>
-    <title>Survey Details</title>
+    <title>Survey details</title>
   </head>
 
   <body>
     <section layout:fragment="content">
-      <div class="container py-4">
+      <div class="container">
         <!-- Back -->
         <div class="mb-3">
           <a th:href="@{/surveys}" class="btn btn-outline-secondary btn-sm">
@@ -19,7 +19,7 @@
           </a>
         </div>
 
-        <h1 class="mb-4">Survey Details</h1>
+        <h1 class="h3 mb-3">Survey details</h1>
 
         <!-- GENERAL INFORMATION -->
 
@@ -54,7 +54,8 @@
 
               <div class="col-md-9">
                 <span
-                  class="badge bg-secondary"
+                  class="badge badge-soft"
+                  th:classappend="${'badge-status-' + #strings.toLowerCase(surveyAnswer.status.name())}"
                   th:text="${surveyAnswer.status}"
                 >
                   ANSWERED
@@ -120,7 +121,11 @@
               <strong>Emotion</strong>
 
               <div>
-                <span class="badge bg-primary" th:text="${emotion}">
+                <span
+                  class="badge badge-soft"
+                  th:classappend="${'badge-emotion-' + #strings.toLowerCase(emotion)}"
+                  th:text="${emotion}"
+                >
                   positive
                 </span>
               </div>

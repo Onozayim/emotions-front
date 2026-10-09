@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.text.html.parser.Entity;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
@@ -78,7 +79,8 @@ public class EmailCountImpl implements EmailCountService {
     }
 
     public List<EmailCount> getEmailCounts(Specification<EmailCount> spec) {
-        return emailCountRepository.findAll(spec);
+        // Oldest first: the dashboard draws these as a time series
+        return emailCountRepository.findAll(spec, Sort.by("createdAt"));
     }
 
     public void incrementPrimaryOrCompound(EmailCount count, String emotion) {

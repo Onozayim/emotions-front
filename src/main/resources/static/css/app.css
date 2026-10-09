@@ -1,0 +1,25 @@
+/*
+ * Soft badges: pale tinted background, darker text of the same hue and a faint
+ * border. Every text/background pair is at least 5.4:1 contrast (WCAG AA).
+ * Usage: <span class="badge badge-soft badge-emotion-positive">positive</span>
+ * Without a modifier (unknown value) the badge stays neutral gray.
+ */
+.badge.badge-soft {
+  --soft-bg: #ecebe8;
+  --soft-text: #4f4e4a;
+  background-color: var(--soft-bg);
+  color: var(--soft-text);
+  border: 1px solid color-mix(in srgb, var(--soft-text) 20%, transparent);
+  font-weight: 600;
+}
+
+/* Survey emotion */
+.badge-soft.badge-emotion-positive { --soft-bg: #e4f1e6; --soft-text: #2b6a3a; }
+.badge-soft.badge-emotion-negative { --soft-bg: #f8e4e2; --soft-text: #9a2f26; }
+.badge-soft.badge-emotion-neutral  { --soft-bg: #ecebe8; --soft-text: #4f4e4a; }
+
+/* Survey status */
+.badge-soft.badge-status-pending  { --soft-bg: #f7eed8; --soft-text: #7a5a12; }
+.badge-soft.badge-status-sent     { --soft-bg: #e3ecf7; --soft-text: #28568f; }
+.badge-soft.badge-status-answered { --soft-bg: #dff0ed; --soft-text: #1f6a5f; }
+.badge-soft.badge-status-expired  { --soft-bg: #ecebe8; --soft-text: #5c5b57; }

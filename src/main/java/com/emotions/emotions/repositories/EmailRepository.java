@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import com.emotions.emotions.entities.Email;
 
@@ -22,4 +21,22 @@ public interface EmailRepository extends JpaRepository<Email, Long>, JpaSpecific
             """, nativeQuery = true)
     List<Object[]> getEmotionCountsByEmail(
             @Param("email") String email);
+        
+    @Query("""
+        SELECT COALESCE(e.fixedCompoundEmotion, e.compoundEmotion),
+            COUNT(e)
+        FROM Email e
+        WHERE e.from = :emailAddress
+        AND COALESCE(
+            e.fixedCompoundEmotion,
+            e.compoundEmotion
+        ) IS NOT NULL
+        GROUP BY COALESCE(
+            e.fixedCompoundEmotion,
+            e.compoundEmotion
+        )
+    """)
+    List<Object[]> getEmotionDistribution(
+            @Param("emailAddress") String emailAddress
+    );
 }

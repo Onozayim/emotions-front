@@ -9,26 +9,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * Single source of truth for the emotions shown in the UI (filters, badges,
- * charts and the compound-emotion editor). Exposed to every template as
- * ${emotions} and ${emotionsByKey} by {@link GlobalModelAdvice}.
- */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Emotion {
     private final String key;
     private final String label;
-    /**
-     * Primary emotions use the first five slots of a colorblind-safe categorical
-     * palette, in this fixed order (the order is what keeps adjacent colors
-     * distinguishable - don't reorder). Compound emotions blend the colors of
-     * their two components.
-     */
     private final String color;
-    /** Text color (white or near-black) with the best contrast on {@link #color}. */
     private final String textColor;
-    /** The two primary emotions that combine into this one; empty for primary emotions. */
     private final List<String> components;
 
     private static final Emotion JOY = primary("joy", "Joy", "#2a78d6");
@@ -71,14 +58,12 @@ public class Emotion {
         private static final String WHITE = "#ffffff";
         private static final String INK = "#0b0b0b";
 
-        /** Average of two colors in OKLab, so blends keep the brightness of their parents. */
         static String mix(String first, String second) {
             double[] a = toOklab(first);
             double[] b = toOklab(second);
             return fromOklab(new double[] { (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2 });
         }
-
-        /** White or near-black, whichever has the higher WCAG contrast against the background. */
+        
         static String readableTextOn(String background) {
             double luminance = luminance(background);
             double withWhite = 1.05 / (luminance + 0.05);

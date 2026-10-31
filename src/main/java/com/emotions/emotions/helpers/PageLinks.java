@@ -7,11 +7,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-/**
- * Builds pagination links that keep every query parameter of the current
- * request (filters, page size...) and only replace "page".
- * Used from templates as ${@pageLinks.to(n)}.
- */
 @Component("pageLinks")
 public class PageLinks {
 

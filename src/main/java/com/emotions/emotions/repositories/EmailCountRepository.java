@@ -1,7 +1,5 @@
 package com.emotions.emotions.repositories;
 
-import org.springframework.stereotype.Repository;
-
 import com.emotions.emotions.entities.EmailCount;
 
 import java.util.Optional;
@@ -12,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 
 
-@Repository
 public interface EmailCountRepository extends JpaRepository<EmailCount, Long>, JpaSpecificationExecutor<EmailCount> {
     @Query(value = "SELECT * FROM emails_count ORDER BY id DESC LIMIT 1", nativeQuery = true)
     EmailCount getLastRecord();

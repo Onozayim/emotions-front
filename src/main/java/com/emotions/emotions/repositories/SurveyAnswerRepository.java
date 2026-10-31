@@ -15,32 +15,34 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SurveyAnswerRepository
-        extends JpaRepository<SurveyAnswer, Integer>, JpaSpecificationExecutor<SurveyAnswer> {
+                extends JpaRepository<SurveyAnswer, Integer>, JpaSpecificationExecutor<SurveyAnswer> {
 
-    Optional<SurveyAnswer> findByToken(String token);
+        Optional<SurveyAnswer> findByToken(String token);
 
-    List<SurveyAnswer> findByEmail(String email);
+        List<SurveyAnswer> findByEmail(String email);
 
-    Optional<SurveyAnswer> findFirstByEmailAndStatus(String email, SurveyStatus status);
+        Optional<SurveyAnswer> findFirstByEmailAndStatus(String email, SurveyStatus status);
 
-    @EntityGraph(attributePaths = { "survey" })
-    List<SurveyAnswer> findTop50ByStatusOrderByCreatedAtAsc(SurveyStatus status);
+        @EntityGraph(attributePaths = { "survey" })
+        List<SurveyAnswer> findTop50ByStatusOrderByCreatedAtAsc(SurveyStatus status);
 
-    @Query("""
-                SELECT sa
-                FROM SurveyAnswer sa
-                JOIN FETCH sa.survey
-                WHERE sa.status = :status
-                  AND sa.lastActivityAt < :before
-                ORDER BY sa.lastActivityAt ASC
-            """)
-    List<SurveyAnswer> findPendingSurveysReadyToSend(
-            @Param("status") SurveyStatus status,
-            @Param("before") LocalDateTime before,
-            Pageable pageable);
+        @Query("""
+                            SELECT sa
+                            FROM SurveyAnswer sa
+                            JOIN FETCH sa.survey
+                            WHERE sa.status = :status
+                              AND sa.lastActivityAt < :before
+                            ORDER BY sa.lastActivityAt ASC
+                        """)
+        List<SurveyAnswer> findPendingSurveysReadyToSend(
+                        @Param("status") SurveyStatus status,
+                        @Param("before") LocalDateTime before,
+                        Pageable pageable);
 
-    @EntityGraph(attributePaths = { "survey" })
-    List<SurveyAnswer> findTop50ByStatusAndSentAtBeforeOrderBySentAtAsc(
-            SurveyStatus status,
-            LocalDateTime before);
+        @EntityGraph(attributePaths = { "survey" })
+        List<SurveyAnswer> findTop50ByStatusAndSentAtBeforeOrderBySentAtAsc(
+                        SurveyStatus status,
+                        LocalDateTime before);
+
+        Optional<SurveyAnswer> findFirstByEmailAndRespondedAtIsNull(String email);
 }

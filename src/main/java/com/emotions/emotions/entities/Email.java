@@ -1,8 +1,6 @@
 package com.emotions.emotions.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 

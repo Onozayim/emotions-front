@@ -3,6 +3,7 @@
 (() => {
   const editor = document.getElementById("email-editor");
   const { updateUrl, currentPrimary, currentSecondary } = editor.dataset;
+  console.log("updateUrl", updateUrl, "currentPrimary", currentPrimary, "currentSecondary", currentSecondary);
 
   const emailFrame = document.getElementById("email_content");
 

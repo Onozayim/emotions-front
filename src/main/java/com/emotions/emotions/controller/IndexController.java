@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,29 +60,32 @@ public class IndexController {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private EmailCountService emailCountService;
+    private final EmailCountService emailCountService;
 
-    @Autowired
-    private EmailRepository emailRepository;
+    private final EmailRepository emailRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PaginatorController paginatorController;
+    private final PaginatorController paginatorController;
 
-    @Autowired
-    private SmtpService smtpService;
+    private final SmtpService smtpService;
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
-    @Autowired
-    private TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
+
+    IndexController(TokenRepository tokenRepository, TokenService tokenService, SmtpService smtpService, PaginatorController paginatorController, EmailRepository emailRepository, PasswordEncoder passwordEncoder, EmailCountService emailCountService, UserRepository userRepository) {
+        this.tokenRepository = tokenRepository;
+        this.tokenService = tokenService;
+        this.smtpService = smtpService;
+        this.paginatorController = paginatorController;
+        this.emailRepository = emailRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.emailCountService = emailCountService;
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/hello")
     public String getMethodName(@RequestParam(name = "name", required = false, defaultValue = "World") String name,

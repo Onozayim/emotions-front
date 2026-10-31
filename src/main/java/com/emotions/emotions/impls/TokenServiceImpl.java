@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.emotions.emotions.entities.Token;
@@ -17,11 +16,13 @@ import com.emotions.emotions.services.TokenService;
 @Service
 public class TokenServiceImpl implements TokenService {
 
-    @Autowired
-    TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    public TokenServiceImpl(TokenRepository tokenRepository, UserRepository userRepository) {
+        this.tokenRepository = tokenRepository;
+        this.userRepository = userRepository;
+    }
 
     public String createToken(String email, Duration duration) throws Exception {
         String tokenString = UUID.randomUUID().toString();

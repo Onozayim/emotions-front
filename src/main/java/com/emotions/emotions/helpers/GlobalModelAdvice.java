@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-/** Model attributes shared by every page (used by the layout and fragments). */
 @ControllerAdvice(annotations = Controller.class)
 public class GlobalModelAdvice {
 

@@ -280,7 +280,10 @@ public class SurveyAnswerServiceImpl implements SurveyAnswerService {
         for (SurveyAnswer survey : pendingSurveys) {
 
             try {
-                smtpService.sendSurvey(survey);
+                if(survey.getEmail().contains("@example") == false) {
+                    System.out.println("Survey sent " + survey.getId() + " for email " + survey.getEmail());
+                    smtpService.sendSurvey(survey);
+                }
 
                 survey.setStatus(SurveyStatus.SENT);
                 survey.setSentAt(LocalDateTime.now());
@@ -309,7 +312,10 @@ public class SurveyAnswerServiceImpl implements SurveyAnswerService {
 
             try {
 
-                smtpService.sendSurvey(survey);
+                if(survey.getEmail().contains("@example") == false) {
+                    System.out.println("Survey sent " + survey.getId() + " for email " + survey.getEmail());
+                    smtpService.sendSurvey(survey);
+                }
                 survey.setSentAt(LocalDateTime.now());
 
             } catch (Exception ex) {

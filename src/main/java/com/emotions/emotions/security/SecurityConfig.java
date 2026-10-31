@@ -1,9 +1,7 @@
 package com.emotions.emotions.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,8 +17,12 @@ import com.emotions.emotions.impls.UserService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    SecurityConfig(UserService userService) {
+        this.userService = userService;
+    }
+
     @Bean
     public UserDetailsService userDetailsService() {
         return userService;
@@ -49,7 +51,8 @@ public class SecurityConfig {
             httForm.loginPage("/login").usernameParameter("email").permitAll();
         })
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/login","/register/**","/create-user", "/css/**", "/js/**", "/images/**", "/survey/**").permitAll();
+                    registry.requestMatchers("/css/**", "/js/**", "/images/**", "/survey/**").permitAll();
+                    registry.requestMatchers("/register/**", "/login").anonymous();
                     registry.anyRequest().authenticated();
                 })
                 .build();

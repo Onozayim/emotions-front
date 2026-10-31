@@ -12,7 +12,11 @@
       <div class="container">
         <h1 class="h3 mb-3">Emails</h1>
 
-        <form th:action="@{/emails}" method="get" class="row g-2 align-items-end mb-4">
+        <form
+          th:action="@{/emails}"
+          method="get"
+          class="row g-2 align-items-end mb-4"
+        >
           <div class="col-sm-4 col-md-3">
             <label class="form-label" for="emotion">Emotion</label>
             <select class="form-select" id="emotion" name="emotion">
@@ -72,31 +76,59 @@
               <div class="small text-muted text-truncate">
                 <span th:text="${i.getFrom()}"></span>
                 ·
-                <span th:text="${#temporals.format(i.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></span>
+                <span
+                  th:text="${#temporals.format(i.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"
+                ></span>
               </div>
             </div>
             <!-- Badges use each emotion's color from Emotion.java; unknown values stay gray -->
+
+            <!-- Display corrected emotions when available -->
             <div
               class="d-flex gap-1 flex-shrink-0"
-              th:with="primaryEmotion=${emotionsByKey[#strings.toLowerCase(i.getEmotion() ?: '')]},
-                       compoundEmotion=${emotionsByKey[#strings.toLowerCase(i.getCompoundEmotion() ?: '')]}"
+              th:with="
+    effectivePrimary=${i.getFixedEmotion() != null ? i.getFixedEmotion() : i.getEmotion()},
+    effectiveSecondary=${i.getFixedSecondaryEmotion() != null ? i.getFixedSecondaryEmotion() : i.getSecondaryEmotion()},
+    effectiveCompound=${i.getFixedCompoundEmotion() != null ? i.getFixedCompoundEmotion() : i.getCompoundEmotion()}
+  "
             >
-              <span
-                th:unless="${#strings.isEmpty(i.getEmotion())}"
-                class="badge rounded-pill"
-                th:classappend="${primaryEmotion == null} ? 'text-bg-secondary'"
-                th:style="${primaryEmotion != null} ? |background-color: ${primaryEmotion.color}; color: ${primaryEmotion.textColor}|"
-                title="Primary emotion"
-                th:text="${#strings.capitalize(i.getEmotion())}"
-              ></span>
-              <span
-                th:unless="${#strings.isEmpty(i.getCompoundEmotion())}"
-                class="badge rounded-pill"
-                th:classappend="${compoundEmotion == null} ? 'text-bg-secondary'"
-                th:style="${compoundEmotion != null} ? |background-color: ${compoundEmotion.color}; color: ${compoundEmotion.textColor}|"
-                title="Compound emotion"
-                th:text="${#strings.capitalize(i.getCompoundEmotion())}"
-              ></span>
+              <th:block
+                th:with="
+      primaryEmotion=${emotionsByKey[#strings.toLowerCase(effectivePrimary ?: '')]},
+      secondaryEmotion=${emotionsByKey[#strings.toLowerCase(effectiveSecondary ?: '')]},
+      compoundEmotion=${emotionsByKey[#strings.toLowerCase(effectiveCompound ?: '')]}
+    "
+              >
+                <!-- Primary emotion -->
+                <span
+                  th:unless="${#strings.isEmpty(effectivePrimary)}"
+                  class="badge rounded-pill"
+                  th:classappend="${primaryEmotion == null} ? 'text-bg-secondary'"
+                  th:style="${primaryEmotion != null} ? |background-color: ${primaryEmotion.color}; color: ${primaryEmotion.textColor}|"
+                  th:title="${i.getFixedEmotion() != null ? 'Corrected primary emotion' : 'Primary emotion'}"
+                  th:text="${#strings.capitalize(effectivePrimary)}"
+                ></span>
+
+                <!-- Secondary emotion -->
+                <span
+                  th:unless="${#strings.isEmpty(effectiveSecondary)}"
+                  class="badge rounded-pill"
+                  th:classappend="${secondaryEmotion == null} ? 'text-bg-secondary'"
+                  th:style="${secondaryEmotion != null} ? |background-color: ${secondaryEmotion.color}; color: ${secondaryEmotion.textColor}|"
+                  th:title="${i.getFixedSecondaryEmotion() != null ? 'Corrected secondary emotion' : 'Secondary emotion'}"
+                  th:text="${#strings.capitalize(effectiveSecondary)}"
+                ></span>
+
+                <!-- Compound emotion -->
+                <span
+                  th:unless="${#strings.isEmpty(effectiveCompound)}"
+                  class="badge rounded-pill"
+                  th:classappend="${compoundEmotion == null} ? 'text-bg-secondary'"
+                  th:style="${compoundEmotion != null} ? |background-color: ${compoundEmotion.color}; color: ${compoundEmotion.textColor}|"
+                  th:title="${i.getFixedCompoundEmotion() != null ? 'Corrected compound emotion' : 'Compound emotion'}"
+                  th:text="${#strings.capitalize(effectiveCompound)}"
+                ></span>
+              </th:block>
             </div>
           </li>
         </ul>
